@@ -38,7 +38,13 @@ jobs:
               }
             }
             
-            core.setOutput('username', data['username']);
+            // Validate username format
+            const username = data['username'];
+            if (!username || !/^[a-z0-9-]+$/.test(username)) {
+              throw new Error('Invalid username format. Use only lowercase letters, numbers, and hyphens.');
+            }
+            
+            core.setOutput('username', username);
             core.setOutput('data', JSON.stringify(data));
             
       - name: Create Bio File
