@@ -1,0 +1,47 @@
+name: Create Bio
+description: Create your Blahaj.bio profile
+title: "[Bio]: "
+labels: ["bio-creation"]
+body:
+  - type: input
+    id: username
+    attributes:
+      label: Username
+      description: Your desired username (only letters, numbers, and hyphens)
+      placeholder: "blahaj-lover"
+    validations:
+      required: true
+  - type: input
+    id: display_name
+    attributes:
+      label: Display Name
+      description: Your display name
+      placeholder: "Blahaj Enthusiast"
+    validations:
+      required: true
+  - type: input
+    id: pronouns
+    attributes:
+      label: Pronouns
+      description: Your pronouns
+      placeholder: "they/them"
+    validations:
+      required: true
+  - type: textarea
+    id: bio
+    attributes:
+      label: Bio
+      description: Tell us about yourself
+      placeholder: "I love Blahaj and coding!"
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Website Links
+      description: One link per line
+      placeholder: |
+        https://github.com/username
+        https://twitter.com/username
+    validations:
+      required: false
