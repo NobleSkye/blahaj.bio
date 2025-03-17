@@ -2,7 +2,7 @@ name: Create Bio Page
 
 on:
   issues:
-    types: [closed, opened, labeled]
+    types: [opened, labeled]
 
 jobs:
   create-bio:
