@@ -11,7 +11,6 @@ jobs:
     permissions:
       contents: write
       issues: write
-    if: contains(github.event.issue.labels.*.name, 'bio-creation')
 
     steps:
       - name: Checkout code
