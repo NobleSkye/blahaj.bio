@@ -28,12 +28,19 @@ jobs:
           script: |
             const issueBody = context.payload.issue.body;
             
-            // Directly extract data based on markdown headers
-            const username = issueBody.split('### Username')[1]?.split('\n')[1]?.trim() || '';
-            const displayName = issueBody.split('### Display Name')[1]?.split('\n')[1]?.trim() || '';
-            const pronouns = issueBody.split('### Pronouns')[1]?.split('\n')[1]?.trim() || '';
-            const bio = issueBody.split('### Bio')[1]?.split('\n')[1]?.trim() || '';
-            const links = issueBody.split('### Website Links')[1]?.split('\n')[1]?.trim() || '';
+            // Function to extract value after a header
+            function extractValue(header) {
+              const regex = new RegExp(`### ${header}\\n(.+?)(?=\\n###|$)`, 's');
+              const match = issueBody.match(regex);
+              return match ? match[1].trim() : '';
+            }
+            
+            // Extract values
+            const username = extractValue('Username');
+            const displayName = extractValue('Display Name');
+            const pronouns = extractValue('Pronouns');
+            const bio = extractValue('Bio');
+            const links = extractValue('Website Links');
             
             // Log to check if we are getting the correct values
             console.log("Username:", username);
@@ -41,6 +48,12 @@ jobs:
             console.log("Pronouns:", pronouns);
             console.log("Bio:", bio);
             console.log("Links:", links);
+            
+            // Validate username
+            if (!username) {
+              core.setFailed('Username is required');
+              return;
+            }
             
             // Export variables to be used in the next steps
             core.exportVariable('USERNAME', username);
@@ -52,26 +65,18 @@ jobs:
       - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          cat > src/content/bios/${{ env.USERNAME }}.md <<EOF
-          ---
-          username: "${{ env.USERNAME }}"
-          display_name: "${{ env.DISPLAY_NAME }}"
-          pronouns: "${{ env.PRONOUNS }}"
-          bio: |
-            ${{ env.BIO }}
-          links: |
-            ${{ env.LINKS }}
-          ---
-          EOF
+          # Use printf to properly handle multiline content
+          printf "---\nusername: \"$USERNAME\"\ndisplay_name: \"$DISPLAY_NAME\"\npronouns: \"$PRONOUNS\"\nbio: |\n  $BIO\nlinks: |\n  $LINKS\n---" > src/content/bios/$USERNAME.md
+          
           # Debug output to verify the file creation
-          cat src/content/bios/${{ env.USERNAME }}.md
+          cat src/content/bios/$USERNAME.md
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add src/content/bios/${{ env.USERNAME }}.md
-          git commit -m "Add bio for @${{ env.USERNAME }}" || echo "No changes to commit"
+          git add src/content/bios/$USERNAME.md
+          git commit -m "Add bio for @$USERNAME" || echo "No changes to commit"
           git push
 
       - name: Close issue with comment
