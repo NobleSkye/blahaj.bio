@@ -4,23 +4,13 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Blahaj.bio - Create Your Bio Page">
   <div class="min-h-screen flex flex-col">
-    <nav class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 py-3">
-        <a href="/" class="inline-block">
-          <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            Blahaj.bio
-          </span>
-        </a>
-      </div>
-    </nav>
-
-    <main class="flex-grow bg-gradient-to-br from-blue-100 to-purple-100 py-16">
+    <main class="flex-grow bg-gradient-to-br from--100 to-purple-100 py-16">
       <div class="max-w-3xl mx-auto px-4">
         <div class="text-center mb-12">
           <h1 class="text-5xl font-bold text-gray-900 mb-4">
             Blahaj.bio
           </h1>
-          <p class="text-xl text-gray-700 mb-8">
+          <p class="text-xl text-white-700 mb-8">
             Create your personal bio page in seconds using GitHub Issues
           </p>
           <div class="space-y-4">
@@ -33,63 +23,39 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-xl p-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6">How it works</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">How it works</h2>
           <div class="space-y-6">
             <div class="flex items-start gap-4">
-              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                <span class="text-blue-600 font-semibold">1</span>
+              <div class="w-8 h-8 bg-blue-100 dark:bg-blue-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-blue-600 dark:text-blue-100 font-semibold">1</span>
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900">Create an Issue</h3>
-                <p class="text-gray-600">Click "Get Started" and fill out the bio template with your information</p>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Create an Issue</h3>
+                <p class="text-gray-600 dark:text-gray-300">Click "Get Started" and fill out the bio template with your information</p>
               </div>
             </div>
             <div class="flex items-start gap-4">
-              <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
-                <span class="text-purple-600 font-semibold">2</span>
+              <div class="w-8 h-8 bg-purple-100 dark:bg-purple-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-purple-600 dark:text-purple-100 font-semibold">2</span>
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900">Submit</h3>
-                <p class="text-gray-600">GitHub Actions will automatically process your submission</p>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Submit</h3>
+                <p class="text-gray-600 dark:text-gray-300">GitHub Actions will automatically process your submission</p>
               </div>
             </div>
             <div class="flex items-start gap-4">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center shrink-0">
-                <span class="text-green-600 font-semibold">3</span>
+              <div class="w-8 h-8 bg-green-100 dark:bg-green-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-green-600 dark:text-green-100 font-semibold">3</span>
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900">Done!</h3>
-                <p class="text-gray-600">Your bio page will be available at blahaj.bio/@username</p>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Done!</h3>
+                <p class="text-gray-600 dark:text-gray-300">Your bio page will be available at blahaj.bio/@username</p>
               </div>
             </div>
           </div>
-        </div>
+        </div>        
       </div>
     </main>
-
-    <footer class="bg-white border-t">
-      <div class="max-w-7xl mx-auto px-4 py-6">
-        <div class="flex justify-between items-center">
-          <div class="text-gray-600">
-            Made with ❤️ by <a href="https://github.com/nobleskye" class="text-blue-500 hover:text-blue-600">nobleskye</a>
-          </div>
-          <div class="flex gap-4">
-            <a
-              href="https://github.com/nobleskye/blahaj.bio"
-              class="text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              View on GitHub
-            </a>
-            <a
-              href="https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml"
-              class="text-blue-500 hover:text-blue-600"
-            >
-              Create New Page
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
   </div>
 </Layout>
