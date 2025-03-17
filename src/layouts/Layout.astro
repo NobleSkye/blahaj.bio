@@ -1,12 +1,29 @@
 ---
 import Footer from '../components/Footer.astro';
+
+const title = Astro.props.title ?? 'Blahaj.bio';
+const description = Astro.props.description ?? 'A community-driven bio platform';
+const image = Astro.props.image ?? '/default-image.png';
 ---
 
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{Astro.props.title}</title>
+    <title>{title}</title>
+
+    <!-- Open Graph Meta Tags (For Discord Embed) -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={image} />
+  
+    <!-- Twitter Card Meta Tags (For Twitter/X) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
   </head>
   <body class="flex flex-col min-h-screen bg-gray-900 text-gray-200 m-0">
     <header class="sticky top-0 left-0 right-0 bg-gray-800 p-4 shadow-sm z-10">

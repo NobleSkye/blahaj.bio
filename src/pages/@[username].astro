@@ -5,13 +5,20 @@ import { getCollection } from 'astro:content';
 export async function getStaticPaths() {
   const bios = await getCollection('bios');
   return bios.map(bio => ({
-    params: { username: bio.data.username },
+    params: { username: bio.data.username.toLowerCase() }, // Normalize to lowercase
     props: { bio: bio.data },
   }));
 }
 
 const { username } = Astro.params;
-const { bio } = Astro.props;
+const bios = await getCollection('bios');
+
+// Find bio using case-insensitive match
+const bio = bios.find(b => b.data.username.toLowerCase() === username.toLowerCase())?.data;
+
+if (!bio) {
+  throw new Error('Bio not found');
+}
 ---
 
 <Layout title={`${bio.display_name} - Blahaj.bio`}>
