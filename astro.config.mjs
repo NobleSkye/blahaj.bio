@@ -4,4 +4,9 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   site: 'https://blahaj.bio',
+  base: '/',
+  output: 'static',
+  build: {
+    format: 'file'
+  }
 });

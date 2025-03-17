@@ -4,9 +4,9 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const bios = await getCollection('bios');
-  return bios.map(bio => ({
-    params: { username: bio.id },
-    props: { bio: bio.data },
+  return bios.map(entry => ({
+    params: { username: entry.id },
+    props: { bio: entry.data },
   }));
 }
 
@@ -15,33 +15,69 @@ const { bio } = Astro.props;
 ---
 
 <Layout title={`${bio.display_name} - Blahaj.bio`}>
-  <main class="min-h-screen bg-gradient-to-br from-blue-100 to-purple-100 py-16">
-    <div class="max-w-2xl mx-auto px-4">
-      <div class="bg-white rounded-2xl shadow-xl p-8">
-        <div class="text-center mb-8">
-          <h1 class="text-3xl font-bold text-gray-900">{bio.display_name}</h1>
-          <p class="text-gray-600 mt-2">{bio.pronouns}</p>
-        </div>
-        
-        <div class="prose max-w-none mb-8">
-          <p class="text-gray-700 whitespace-pre-wrap">{bio.bio}</p>
-        </div>
-        
-        {bio.links && (
-          <div class="space-y-3">
-            {bio.links.split('\n').map(link => (
-              <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-              >
-                {new URL(link).hostname}
-              </a>
-            ))}
-          </div>
-        )}
+  <div class="min-h-screen flex flex-col">
+    <nav class="bg-white shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 py-3">
+        <a href="/" class="inline-block">
+          <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
+            Blahaj.bio
+          </span>
+        </a>
       </div>
-    </div>
-  </main>
+    </nav>
+
+    <main class="flex-grow bg-gradient-to-br from-blue-100 to-purple-100 py-16">
+      <div class="max-w-2xl mx-auto px-4">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+          <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">{bio.display_name}</h1>
+            <p class="text-gray-600 mt-2">{bio.pronouns}</p>
+          </div>
+          
+          <div class="prose max-w-none mb-8">
+            <p class="text-gray-700 whitespace-pre-wrap">{bio.bio}</p>
+          </div>
+          
+          {bio.links && (
+            <div class="space-y-3">
+              {bio.links.split('\n').map(link => (
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
+                >
+                  {new URL(link).hostname}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-white border-t">
+      <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex justify-between items-center">
+          <div class="text-gray-600">
+            Made with ❤️ by <a href="https://github.com/nobleskye" class="text-blue-500 hover:text-blue-600">nobleskye</a>
+          </div>
+          <div class="flex gap-4">
+            <a
+              href="https://github.com/nobleskye/blahaj-bio"
+              class="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              View on GitHub
+            </a>
+            <a
+              href="https://github.com/nobleskye/blahaj-bio/issues/new?template=create-bio.yml"
+              class="text-blue-500 hover:text-blue-600"
+            >
+              Create New Page
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
 </Layout>
