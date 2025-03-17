@@ -28,14 +28,13 @@ jobs:
           script: |
             const issueBody = context.payload.issue.body;
             
-            // Function to extract value after a header
-            function extractValue(header) {
+            // Use regex to extract information more reliably
+            const extractValue = (header) => {
               const regex = new RegExp(`### ${header}\\n(.+?)(?=\\n###|$)`, 's');
               const match = issueBody.match(regex);
               return match ? match[1].trim() : '';
-            }
+            };
             
-            // Extract values
             const username = extractValue('Username');
             const displayName = extractValue('Display Name');
             const pronouns = extractValue('Pronouns');
@@ -49,12 +48,6 @@ jobs:
             console.log("Bio:", bio);
             console.log("Links:", links);
             
-            // Validate username
-            if (!username) {
-              core.setFailed('Username is required');
-              return;
-            }
-            
             // Export variables to be used in the next steps
             core.exportVariable('USERNAME', username);
             core.exportVariable('DISPLAY_NAME', displayName);
@@ -65,17 +58,19 @@ jobs:
       - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          # Use printf to properly handle multiline content
-          printf "---\nusername: \"$USERNAME\"\ndisplay_name: \"$DISPLAY_NAME\"\npronouns: \"$PRONOUNS\"\nbio: |\n  $BIO\nlinks: |\n  $LINKS\n---" > src/content/bios/$USERNAME.md
+          # Use printf with proper escaping
+          printf -- "---\nusername: \"%s\"\ndisplay_name: \"%s\"\npronouns: \"%s\"\nbio: |\n  %s\nlinks: |\n  %s\n---\n" \
+            "$USERNAME" "$DISPLAY_NAME" "$PRONOUNS" "$BIO" "$LINKS" \
+            > "src/content/bios/$USERNAME.md"
           
           # Debug output to verify the file creation
-          cat src/content/bios/$USERNAME.md
+          cat "src/content/bios/$USERNAME.md"
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add src/content/bios/$USERNAME.md
+          git add "src/content/bios/$USERNAME.md"
           git commit -m "Add bio for @$USERNAME" || echo "No changes to commit"
           git push
 
