@@ -1,4 +1,4 @@
-name: Create Bio Pages
+name: Process Bio Issues
 
 on:
   workflow_dispatch:  # Allows manual triggering
@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/create-bio.yml'  # Run when this workflow file changes
+      - '.github/workflows/process-bio-issues.yml'  # Run when this workflow file changes
 
 jobs:
   process-bio-issues:
@@ -39,7 +39,7 @@ jobs:
             
             console.log(`Found ${issues.data.length} open bio-creation issues`);
             return issues.data;
-        result-encoding: json
+          result-encoding: json
 
       - name: Process bio issues
         uses: actions/github-script@v7

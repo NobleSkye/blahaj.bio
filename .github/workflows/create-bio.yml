@@ -2,78 +2,95 @@ name: Create Bio Page
 
 on:
   issues:
-    types: [opened]
+    types: [opened, labeled]
 
 jobs:
   create-bio:
-    if: contains(github.event.issue.labels.*.name, 'bio-creation')
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
-    
+    if: contains(github.event.issue.labels.*.name, 'bio-creation')
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
-      - name: Parse Issue Body
-        id: parse
+
+      - name: Extract bio information
+        id: extract
         uses: actions/github-script@v7
         with:
           script: |
-            const body = context.payload.issue.body;
-            const lines = body.split('\n');
-            const data = {};
+            const issueBody = context.payload.issue.body;
             
-            let currentField = '';
-            for (const line of lines) {
-              if (line.startsWith('### ')) {
-                currentField = line.replace('### ', '').toLowerCase();
-              } else if (line && !line.startsWith('_')) {
-                data[currentField] = line.trim();
-              }
-            }
+            // Extract fields using regex
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
+            const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
+            const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
+            const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
             
-            // Validate username format
-            const username = data['username'];
-            if (!username || !/^[a-z0-9-]+$/.test(username)) {
-              throw new Error('Invalid username format. Use only lowercase letters, numbers, and hyphens.');
-            }
+            // Set outputs
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
+            const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
+            const bio = bioMatch ? bioMatch[1].trim() : '';
+            const links = linksMatch ? linksMatch[1].trim() : '';
             
-            core.setOutput('username', username);
-            core.setOutput('data', JSON.stringify(data));
+            core.exportVariable('USERNAME', username);
+            core.exportVariable('DISPLAY_NAME', displayName);
+            core.exportVariable('PRONOUNS', pronouns);
+            core.exportVariable('BIO', bio);
+            core.exportVariable('LINKS', links);
             
-      - name: Create Bio File
-        env:
-          BIO_DATA: ${{ steps.parse.outputs.data }}
-          USERNAME: ${{ steps.parse.outputs.username }}
+            // Debug output
+            console.log(`Username: ${username}`);
+            console.log(`Display Name: ${displayName}`);
+            console.log(`Pronouns: ${pronouns}`);
+            console.log(`Bio: ${bio}`);
+            console.log(`Links: ${links}`);
+
+      - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          echo "$BIO_DATA" | jq -r 'to_entries | map("---\n" + (.key + ": " + .value) + "\n---") | .[]' > "src/content/bios/${USERNAME}.md"
-          
-      - name: Commit and Push
+          cat > src/content/bios/${{ env.USERNAME }}.md << 'EOF'
+          ---
+          username: "${{ env.USERNAME }}"
+          display_name: "${{ env.DISPLAY_NAME }}"
+          pronouns: "${{ env.PRONOUNS }}"
+          bio: |
+            ${{ env.BIO }}
+          links: |
+            ${{ env.LINKS }}
+          ---
+          EOF
+
+      - name: Commit and push changes
         run: |
-          git config --global user.name 'GitHub Actions'
+          git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add .
-          git commit -m "Add bio for @${{ steps.parse.outputs.username }}"
+          git add src/content/bios/${{ env.USERNAME }}.md
+          git commit -m "Add bio for @${{ env.USERNAME }}"
           git push
-          
-      - name: Close Issue
+
+      - name: Close issue with comment
         uses: actions/github-script@v7
         with:
           script: |
-            const username = context.payload.issue.user.login;
+            const username = process.env.USERNAME;
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `✨ Your bio page has been created! View it at blahaj.bio/@${username}`
+              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
+            
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
