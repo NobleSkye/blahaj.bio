@@ -28,50 +28,56 @@ jobs:
           script: |
             const issueBody = context.payload.issue.body;
             
-            // Directly extract data based on markdown headers
-            const username = issueBody.split('### Username')[1]?.split('\n')[1]?.trim() || '';
-            const displayName = issueBody.split('### Display Name')[1]?.split('\n')[1]?.trim() || '';
-            const pronouns = issueBody.split('### Pronouns')[1]?.split('\n')[1]?.trim() || '';
-            const bio = issueBody.split('### Bio')[1]?.split('\n')[1]?.trim() || '';
-            const links = issueBody.split('### Website Links')[1]?.split('\n')[1]?.trim() || '';
+            // Extract fields using regex
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
+            const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
+            const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
+            const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
             
-            // Log to check if we are getting the correct values
-            console.log("Username:", username);
-            console.log("Display Name:", displayName);
-            console.log("Pronouns:", pronouns);
-            console.log("Bio:", bio);
-            console.log("Links:", links);
+            // Set outputs
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
+            const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
+            const bio = bioMatch ? bioMatch[1].trim() : '';
+            const links = linksMatch ? linksMatch[1].trim() : '';
             
-            // Export variables to be used in the next steps
             core.exportVariable('USERNAME', username);
             core.exportVariable('DISPLAY_NAME', displayName);
             core.exportVariable('PRONOUNS', pronouns);
             core.exportVariable('BIO', bio);
             core.exportVariable('LINKS', links);
+            
+            // Debug output
+            console.log(`Username: ${username}`);
+            console.log(`Display Name: ${displayName}`);
+            console.log(`Pronouns: ${pronouns}`);
+            console.log(`Bio: ${bio}`);
+            console.log(`Links: ${links}`);
 
       - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          cat > src/content/bios/${{ env.USERNAME }}.md <<EOF
+          cat > src/content/bios/${{ secrets.USERNAME }}.md <<EOF
           ---
-          username: "${{ env.USERNAME }}"
-          display_name: "${{ env.DISPLAY_NAME }}"
-          pronouns: "${{ env.PRONOUNS }}"
+          username: "${{ secrets.USERNAME }}"
+          display_name: "${{ secrets.DISPLAY_NAME }}"
+          pronouns: "${{ secrets.PRONOUNS }}"
           bio: |
-            ${{ env.BIO }}
+            ${{ secrets.BIO }}
           links: |
-            ${{ env.LINKS }}
+            ${{ secrets.LINKS }}
           ---
           EOF
-          # Debug output to verify the file creation
-          cat src/content/bios/${{ env.USERNAME }}.md
+          # Debug output
+          cat src/content/bios/${{ secrets.USERNAME }}.md
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add src/content/bios/${{ env.USERNAME }}.md
-          git commit -m "Add bio for @${{ env.USERNAME }}" || echo "No changes to commit"
+          git add src/content/bios/${{ secrets.USERNAME }}.md
+          git commit -m "Add bio for @${{ secrets.USERNAME }}" || echo "No changes to commit"
           git push
 
       - name: Close issue with comment
