@@ -69,13 +69,15 @@ jobs:
             ${{ env.LINKS }}
           ---
           EOF
+          # Debug output
+          cat src/content/bios/${{ env.USERNAME }}.md
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
           git add src/content/bios/${{ env.USERNAME }}.md
-          git commit -m "Add bio for @${{ env.USERNAME }}"
+          git commit -m "Add bio for @${{ env.USERNAME }}" || echo "No changes to commit"
           git push
 
       - name: Close issue with comment
@@ -87,14 +89,13 @@ jobs:
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issue_number,
+              issue_number: context.issue.number,
               body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
 
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
               issue_number: context.issue.number,
               state: 'closed'
             });
