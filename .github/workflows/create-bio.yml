@@ -37,12 +37,14 @@ jobs:
             
 
 
+
             // Export variables to be used in the next steps
             core.exportVariable('USERNAME', username);
             core.exportVariable('DISPLAY_NAME', displayName);
             core.exportVariable('PRONOUNS', pronouns);
             core.exportVariable('BIO', bio);
             core.exportVariable('LINKS', links);
+
 
             // Log to check if we are getting the correct values
             console.log("Username:", username);
@@ -51,7 +53,6 @@ jobs:
             console.log("Bio:", bio);
             console.log("Links:", links);
             
-
 
       - name: Create bio file
         run: |
@@ -69,7 +70,6 @@ jobs:
           EOF
           # Debug output to verify the file creation
           cat src/content/bios/${{ env.USERNAME }}.md
-
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
@@ -77,7 +77,6 @@ jobs:
           git add src/content/bios/${{ env.USERNAME }}.md
           git commit -m "Add bio for @${{ env.USERNAME }}" || echo "No changes to commit"
           git push
-
       - name: Close issue with comment
         uses: actions/github-script@v7
         with:
@@ -90,7 +89,6 @@ jobs:
               issue_number: context.issue.number,
               body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
-
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
