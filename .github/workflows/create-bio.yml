@@ -58,26 +58,26 @@ jobs:
       - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          cat > src/content/bios/${{ env.USERNAME }}.md << 'EOF'
+          cat > src/content/bios/${{ secrets.USERNAME }}.md <<EOF
           ---
-          username: "${{ env.USERNAME }}"
-          display_name: "${{ env.DISPLAY_NAME }}"
-          pronouns: "${{ env.PRONOUNS }}"
+          username: "${{ secrets.USERNAME }}"
+          display_name: "${{ secrets.DISPLAY_NAME }}"
+          pronouns: "${{ secrets.PRONOUNS }}"
           bio: |
-            ${{ env.BIO }}
+            ${{ secrets.BIO }}
           links: |
-            ${{ env.LINKS }}
+            ${{ secrets.LINKS }}
           ---
           EOF
           # Debug output
-          cat src/content/bios/${{ env.USERNAME }}.md
+          cat src/content/bios/${{ secrets.USERNAME }}.md
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add src/content/bios/${{ env.USERNAME }}.md
-          git commit -m "Add bio for @${{ env.USERNAME }}" || echo "No changes to commit"
+          git add src/content/bios/${{ secrets.USERNAME }}.md
+          git commit -m "Add bio for @${{ secrets.USERNAME }}" || echo "No changes to commit"
           git push
 
       - name: Close issue with comment
