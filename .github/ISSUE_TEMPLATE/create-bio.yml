@@ -8,7 +8,7 @@ body:
     attributes:
       label: Username
       description: Your desired username (only letters, numbers, and hyphens)
-      placeholder: "blahaj-lover"
+      placeholder: "Blahaj"
     validations:
       required: true
   - type: input
@@ -16,7 +16,7 @@ body:
     attributes:
       label: Display Name
       description: Your display name
-      placeholder: "Blahaj Enthusiast"
+      placeholder: "Blåhaj"
     validations:
       required: true
   - type: input
@@ -24,7 +24,7 @@ body:
     attributes:
       label: Pronouns
       description: Your pronouns
-      placeholder: "they/them"
+      placeholder: "Any/All"
     validations:
       required: true
   - type: textarea
@@ -42,6 +42,7 @@ body:
       description: One link per line
       placeholder: |
         https://github.com/username
-        https://twitter.com/username
+        https://bsky.app/profile/username
+        https://blahaj.bio/@username
     validations:
       required: false

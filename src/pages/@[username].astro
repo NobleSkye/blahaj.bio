@@ -4,9 +4,9 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const bios = await getCollection('bios');
-  return bios.map(entry => ({
-    params: { username: entry.id },
-    props: { bio: entry.data },
+  return bios.map(bio => ({
+    params: { username: bio.data.username },
+    props: { bio: bio.data },
   }));
 }
 
@@ -40,16 +40,25 @@ const { bio } = Astro.props;
           
           {bio.links && (
             <div class="space-y-3">
-              {bio.links.split('\n').map(link => (
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-                >
-                  {new URL(link).hostname}
-                </a>
-              ))}
+              {bio.links.split('\n').map(link => {
+                const trimmedLink = link.trim();
+                if (!trimmedLink) return null;
+                try {
+                  const url = new URL(trimmedLink);
+                  return (
+                    <a
+                      href={trimmedLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
+                    >
+                      {url.hostname.replace('www.', '')}
+                    </a>
+                  );
+                } catch {
+                  return null;
+                }
+              })}
             </div>
           )}
         </div>
