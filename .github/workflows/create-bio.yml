@@ -6,11 +6,11 @@ on:
 
 jobs:
   create-bio:
-    if: contains(github.event.issue.labels.*.name, 'bio-creation')
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
+    if: contains(github.event.issue.labels.*.name, 'bio-creation')
 
     steps:
       - name: Checkout code
@@ -28,50 +28,54 @@ jobs:
           script: |
             const issueBody = context.payload.issue.body;
             
-            // Use regex to extract information more reliably
-            const extractValue = (header) => {
-              const regex = new RegExp(`### ${header}\\n(.+?)(?=\\n###|$)`, 's');
-              const match = issueBody.match(regex);
-              return match ? match[1].trim() : '';
-            };
+            // Extract fields using regex
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
+            const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
+            const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
+            const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
             
-            const username = extractValue('Username');
-            const displayName = extractValue('Display Name');
-            const pronouns = extractValue('Pronouns');
-            const bio = extractValue('Bio');
-            const links = extractValue('Website Links');
+            // Set outputs
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
+            const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
+            const bio = bioMatch ? bioMatch[1].trim() : '';
+            const links = linksMatch ? linksMatch[1].trim() : '';
             
-            // Log to check if we are getting the correct values
-            console.log("Username:", username);
-            console.log("Display Name:", displayName);
-            console.log("Pronouns:", pronouns);
-            console.log("Bio:", bio);
-            console.log("Links:", links);
-            
-            // Export variables to be used in the next steps
             core.exportVariable('USERNAME', username);
             core.exportVariable('DISPLAY_NAME', displayName);
             core.exportVariable('PRONOUNS', pronouns);
             core.exportVariable('BIO', bio);
             core.exportVariable('LINKS', links);
+            
+            // Debug output
+            console.log(`Username: ${username}`);
+            console.log(`Display Name: ${displayName}`);
+            console.log(`Pronouns: ${pronouns}`);
+            console.log(`Bio: ${bio}`);
+            console.log(`Links: ${links}`);
 
       - name: Create bio file
         run: |
           mkdir -p src/content/bios
-          # Use printf with proper escaping
-          printf -- "---\nusername: \"%s\"\ndisplay_name: \"%s\"\npronouns: \"%s\"\nbio: |\n  %s\nlinks: |\n  %s\n---\n" \
-            "$USERNAME" "$DISPLAY_NAME" "$PRONOUNS" "$BIO" "$LINKS" \
-            > "src/content/bios/$USERNAME.md"
-          
-          # Debug output to verify the file creation
-          cat "src/content/bios/$USERNAME.md"
+          cat > src/content/bios/${{ env.USERNAME }}.md << 'EOF'
+          ---
+          username: "${{ env.USERNAME }}"
+          display_name: "${{ env.DISPLAY_NAME }}"
+          pronouns: "${{ env.PRONOUNS }}"
+          bio: |
+            ${{ env.BIO }}
+          links: |
+            ${{ env.LINKS }}
+          ---
+          EOF
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
-          git add "src/content/bios/$USERNAME.md"
-          git commit -m "Add bio for @$USERNAME" || echo "No changes to commit"
+          git add src/content/bios/${{ env.USERNAME }}.md
+          git commit -m "Add bio for @${{ env.USERNAME }}"
           git push
 
       - name: Close issue with comment
@@ -86,7 +90,7 @@ jobs:
               issue_number: context.issue.number,
               body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
-
+            
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
