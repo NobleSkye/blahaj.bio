@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write
       issues: write
-    if: ${{ startsWith(github.event.issue.title, '[Bio]: ') }}
+    if: startsWith(github.event.issue.title, '[Bio]: ')
 
     steps:
       - uses: actions/checkout@v4
