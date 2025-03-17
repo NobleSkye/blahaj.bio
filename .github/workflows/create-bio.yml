@@ -35,6 +35,14 @@ jobs:
             const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
             const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
             
+            // Log the matches to debug
+            console.log("Raw issue body:", issueBody);
+            console.log("Username match:", usernameMatch);
+            console.log("Display name match:", displayNameMatch);
+            console.log("Pronouns match:", pronounsMatch);
+            console.log("Bio match:", bioMatch);
+            console.log("Links match:", linksMatch);
+            
             // Set outputs
             const username = usernameMatch ? usernameMatch[1].trim() : '';
             const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
@@ -48,7 +56,7 @@ jobs:
             core.exportVariable('BIO', bio);
             core.exportVariable('LINKS', links);
             
-            // Debug output
+            // Debug output for extracted values
             console.log(`Username: ${username}`);
             console.log(`Display Name: ${displayName}`);
             console.log(`Pronouns: ${pronouns}`);
@@ -69,7 +77,7 @@ jobs:
             ${{ env.LINKS }}
           ---
           EOF
-          # Debug output
+          # Debug output to verify the file creation
           cat src/content/bios/${{ env.USERNAME }}.md
 
       - name: Commit and push changes
