@@ -6,11 +6,11 @@ on:
 
 jobs:
   create-bio:
-    if: startsWith(github.event.issue.title, '[Bio]: ') 
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
+    if: ${{ startsWith(github.event.issue.title, '[Bio]: ') }}
 
     steps:
       - uses: actions/checkout@v4
