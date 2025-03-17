@@ -1,0 +1,135 @@
+name: Create Bio Pages
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/create-bio.yml'  # Run when this workflow file changes
+
+jobs:
+  process-bio-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch open bio-creation issues
+        id: fetch-issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['bio-creation']
+            });
+            
+            console.log(`Found ${issues.data.length} open bio-creation issues`);
+            return issues.data;
+        result-encoding: json
+
+      - name: Process bio issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = ${{ steps.fetch-issues.outputs.result }};
+            const fs = require('fs');
+            
+            // Create directory if it doesn't exist
+            if (!fs.existsSync('src/content/bios')) {
+              fs.mkdirSync('src/content/bios', { recursive: true });
+            }
+            
+            let createdAny = false;
+            
+            for (const issue of issues) {
+              console.log(`Processing issue #${issue.number}: ${issue.title}`);
+              const issueBody = issue.body;
+              
+              // Extract fields using regex
+              const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+              const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
+              const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
+              const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
+              const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
+              
+              // Skip if any required field is missing
+              if (!usernameMatch || !displayNameMatch || !pronounsMatch || !bioMatch) {
+                console.log(`Issue #${issue.number} is missing required fields. Skipping.`);
+                continue;
+              }
+              
+              const username = usernameMatch[1].trim();
+              const displayName = displayNameMatch[1].trim();
+              const pronouns = pronounsMatch[1].trim();
+              const bio = bioMatch[1].trim();
+              const links = linksMatch ? linksMatch[1].trim() : '';
+              
+              // Debug output
+              console.log(`Username: ${username}`);
+              console.log(`Display Name: ${displayName}`);
+              console.log(`Pronouns: ${pronouns}`);
+              
+              // Create or update bio file
+              const bioContent = `---
+username: "${username}"
+display_name: "${displayName}"
+pronouns: "${pronouns}"
+bio: |
+  ${bio}
+links: |
+  ${links}
+---`;
+              
+              fs.writeFileSync(`src/content/bios/${username}.md`, bioContent);
+              createdAny = true;
+              
+              // Close the issue with a comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
+              });
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
+            
+            // Only commit if any files were created
+            if (createdAny) {
+              // Use git command-line for pushing changes
+              const { execSync } = require('child_process');
+              
+              execSync('git config --global user.name "GitHub Actions Bot"');
+              execSync('git config --global user.email "actions@github.com"');
+              execSync('git add src/content/bios/*.md');
+              
+              try {
+                execSync('git commit -m "Add/update bio pages from open issues"');
+                execSync('git push');
+                console.log('Changes committed and pushed');
+              } catch (error) {
+                console.log('No changes to commit or error pushing changes');
+                console.log(error.message);
+              }
+            } else {
+              console.log('No bio files were created or updated');
+            }
