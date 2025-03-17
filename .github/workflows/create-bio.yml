@@ -6,7 +6,7 @@ on:
 
 jobs:
   create-bio:
-    if: contains(github.event.issue.labels.*.name, 'bio-creation')
+    if: startsWith(github.event.issue.title, '[Bio]: ') 
     runs-on: ubuntu-latest
     permissions:
       contents: write
