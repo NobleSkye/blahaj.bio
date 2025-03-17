@@ -11,72 +11,72 @@ jobs:
     permissions:
       contents: write
       issues: write
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Parse Issue Body
         id: parse
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const body = context.payload.issue.body;
-            const lines = body.split('\n');
-            const data = {};
-            
-            let currentField = '';
-            for (const line of lines) {
-              if (line.startsWith('### ')) {
-                currentField = line.replace('### ', '').toLowerCase();
-              } else if (line && !line.startsWith('_')) {
-                data[currentField] = line.trim();
-              }
-            }
-            
-            // Validate username format
-            const username = data['username'];
-            if (!username || !/^[a-z0-9-]+$/.test(username)) {
-              throw new Error('Invalid username format. Use only lowercase letters, numbers, and hyphens.');
-            }
-            
-            core.setOutput('username', username);
-            core.setOutput('data', JSON.stringify(data));
-            
+        run: |
+          BODY=$(jq -r '.issue.body' <<< '${{ toJSON(github.event) }}')
+
+          USERNAME=$(jq -r '.issue.body | capture("Username:\\s*(?<u>[a-zA-Z0-9-]+)") | .u' <<< "${BODY}")
+          DISPLAY_NAME=$(jq -r '.issue.body | capture("Display Name:\\s*(?<dn>.+)") | .dn' <<< "${BODY}")
+          PRONOUNS=$(jq -r '.issue.body | capture("Pronouns:\\s*(?<p>.+)") | .p' <<< "${BODY}")
+          BIO=$(jq -r '.issue.body | capture("Bio:\\s*(?<b>.+)") | .b' <<< "${BODY}")
+          LINKS=$(jq -r '.issue.body | capture("Website Links:\\s*(?<l>(.|\n)+)") | .l' <<< "${BODY}" | sed '/^$/d')
+
+          echo "USERNAME=${USERNAME}" >> $GITHUB_ENV
+          echo "DISPLAY_NAME=${DISPLAY_NAME}" >> $GITHUB_ENV
+          echo "PRONOUNS=${PRONOUNS}" >> $GITHUB_ENV
+          echo "BIO=${BIO}" >> $GITHUB_ENV
+          echo "LINKS=${LINKS}" >> $GITHUB_ENV
+
       - name: Create Bio File
-        env:
-          BIO_DATA: ${{ steps.parse.outputs.data }}
-          USERNAME: ${{ steps.parse.outputs.username }}
         run: |
           mkdir -p src/content/bios
-          echo "$BIO_DATA" | jq -r 'to_entries | map("---\n" + (.key + ": " + .value) + "\n---") | .[]' > "src/content/bios/${USERNAME}.md"
-          
+          cat <<EOF > src/content/bios/${USERNAME}.md
+          ---
+          username: "${USERNAME}"
+          display_name: "${DISPLAY_NAME}"
+          pronouns: "${PRONOUNS}"
+          bio: |
+            ${BIO}
+          links: |
+            ${LINKS}
+          ---
+          EOF
+
       - name: Commit and Push
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git add .
-          git commit -m "Add bio for @${{ steps.parse.outputs.username }}"
+          git commit -m "Add bio for @${USERNAME}"
           git push
-          
+
       - name: Close Issue
         uses: actions/github-script@v7
         with:
           script: |
-            const username = context.payload.issue.user.login;
+            const username = process.env.USERNAME;
+            const issue_number = context.issue.number;
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body: `✨ Your bio page has been created! View it at blahaj.bio/@${username}`
+              issue_number: issue_number,
+              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
+
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: issue_number,
               state: 'closed'
             });
