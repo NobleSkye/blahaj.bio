@@ -6,6 +6,7 @@ on:
 
 jobs:
   create-bio:
+    if: contains(github.event.issue.labels.*.name, 'bio-creation')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -87,13 +88,14 @@ jobs:
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: issue_number,
               body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
-            
+
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              issue_number: context.issue.number,
               issue_number: context.issue.number,
               state: 'closed'
             });
