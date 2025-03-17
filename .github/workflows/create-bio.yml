@@ -1,8 +1,3 @@
-github action that takes from a github issue that fills this out, this is in src/content/bios/username.md
-make it so the username is from the md file thatis this, as well 
-
-
-here is the github action for the genral idea of what it does
 name: Create Bio Page
 
 on:
