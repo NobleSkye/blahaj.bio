@@ -1,0 +1,15 @@
+// src/components/Footer.astro
+---
+import DarkModeToggle from './DarkModeToggle';
+---
+
+<footer class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <div>
+      <p>© 2025 Blahaj.bio - All rights reserved</p>
+    </div>
+    <div>
+      <DarkModeToggle client:load />
+    </div>
+  </div>
+</footer>

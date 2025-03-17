@@ -42,6 +42,7 @@ body:
       description: One link per line
       placeholder: |
         https://github.com/username
-        https://twitter.com/username
+        https://example.com
+        https://bsky.app/profile/username
     validations:
       required: false

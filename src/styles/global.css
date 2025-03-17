@@ -1,0 +1,18 @@
+/* src/styles/global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark mode transitions */
+:root {
+  --transition-duration: 0.3s;
+}
+
+html {
+  transition: background-color var(--transition-duration) ease;
+}
+
+body {
+  transition: color var(--transition-duration) ease,
+              background-color var(--transition-duration) ease;
+}
