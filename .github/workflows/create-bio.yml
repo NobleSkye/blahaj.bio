@@ -86,26 +86,6 @@ jobs:
           script: |
             const username = process.env.USERNAME;
             
-            // Extract fields using regex
-            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
-            const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
-            const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
-            const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
-            const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
-            
-            // Set outputs
-            const username = usernameMatch ? usernameMatch[1].trim() : '';
-            const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
-            const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
-            const bio = bioMatch ? bioMatch[1].trim() : '';
-            const links = linksMatch ? linksMatch[1].trim() : '';
-            
-            core.exportVariable('USERNAME', username);
-            core.exportVariable('DISPLAY_NAME', displayName);
-            core.exportVariable('PRONOUNS', pronouns);
-            core.exportVariable('BIO', bio);
-            core.exportVariable('LINKS', links);
-            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
