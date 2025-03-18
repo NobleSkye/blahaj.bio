@@ -5,27 +5,7 @@ on:
     types: [opened, labeled]
 
 jobs:
-  check-label:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for label
-        id: check
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const labels = context.payload.issue.labels.map(label => label.name);
-            if (!labels.includes('bio-creation')) {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: 'read'
-              });
-              return;
-            }
-
   create-bio:
-    needs: check-label
     if: contains(github.event.issue.labels.*.name, 'bio-creation')
     runs-on: ubuntu-latest
     permissions:
@@ -110,7 +90,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${{username}}](https://blahaj.bio/@${{username}})`
+              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
             });
 
             await github.rest.issues.update({
