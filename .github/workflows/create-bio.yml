@@ -1,67 +1,105 @@
-name: Create Bio
+name: Create Bio Page
 
 on:
-  workflow_dispatch:
-    inputs:
-      username:
-        description: "Your desired username (only letters, numbers, and hyphens)"
-        required: true
-        type: string
-      display_name:
-        description: "Your display name"
-        required: true
-        type: string
-      pronouns:
-        description: "Your pronouns"
-        required: true
-        type: string
-      bio:
-        description: "Tell us about yourself"
-        required: true
-        type: string
-      links:
-        description: "Website links (one per line)"
-        required: false
-        type: string
+  issues:
+    types: [opened, labeled]
 
 jobs:
-  create_bio:
+  create-bio:
+    if: contains(github.event.issue.labels.*.name, 'bio-creation')
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+      issues: write
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    
-    - name: Create bio file
-      run: |
-        # Fetch input values
-        USERNAME="${{ github.event.inputs.username }}"
-        DISPLAY_NAME="${{ github.event.inputs.display_name }}"
-        PRONOUNS="${{ github.event.inputs.pronouns }}"
-        BIO="${{ github.event.inputs.bio }}"
-        LINKS="${{ github.event.inputs.links }}"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-        # Define the directory and file path
-        FILE_PATH="src/content/bios/${USERNAME}.md"
-        
-        # Create the bio content in markdown format
-        echo "---" > $FILE_PATH
-        echo "username: \"$USERNAME\"" >> $FILE_PATH
-        echo "display_name: \"$DISPLAY_NAME\"" >> $FILE_PATH
-        echo "pronouns: \"$PRONOUNS\"" >> $FILE_PATH
-        echo "bio: |" >> $FILE_PATH
-        echo "  $BIO" >> $FILE_PATH
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-        if [ -n "$LINKS" ]; then
-          echo "links: |" >> $FILE_PATH
-          echo "  $LINKS" >> $FILE_PATH
-        fi
-        
-        echo "---" >> $FILE_PATH
+      - name: Extract bio information
+        id: extract
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueBody = context.payload.issue.body;
+            
+            // Extract fields using regex
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const displayNameMatch = issueBody.match(/Display Name:\s*(.+?)(?=\n\n|\n###)/);
+            const pronounsMatch = issueBody.match(/Pronouns:\s*(.+?)(?=\n\n|\n###)/);
+            const bioMatch = issueBody.match(/Bio:\s*(.+?)(?=\n\n|\n###)/);
+            const linksMatch = issueBody.match(/Website Links:\s*([\s\S]+?)(?=\n\n|\n###|$)/);
+            
+            // Set outputs
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
+            const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
+            const bio = bioMatch ? bioMatch[1].trim() : '';
+            const links = linksMatch ? linksMatch[1].trim() : '';
+            
+            core.exportVariable('USERNAME', username);
+            core.exportVariable('DISPLAY_NAME', displayName);
+            core.exportVariable('PRONOUNS', pronouns);
+            core.exportVariable('BIO', bio);
+            core.exportVariable('LINKS', links);
+            
+            // Debug output
+            console.log(`Username: ${username}`);
+            console.log(`Display Name: ${displayName}`);
+            console.log(`Pronouns: ${pronouns}`);
+            console.log(`Bio: ${bio}`);
+            console.log(`Links: ${links}`);
 
-        # Commit the file to the repository
-        git config --global user.email "youremail@example.com"
-        git config --global user.name "Your Name"
-        git add $FILE_PATH
-        git commit -m "Create bio for $USERNAME"
-        git push
+      - name: Create bio file
+        run: |
+          mkdir -p src/content/bios
+          cat > src/content/bios/${{ secrets.USERNAME }}.md <<EOF
+          ---
+          username: "${{ secrets.USERNAME }}"
+          display_name: "${{ secrets.DISPLAY_NAME }}"
+          pronouns: "${{ secrets.PRONOUNS }}"
+          bio: |
+            ${{ secrets.BIO }}
+          links: |
+            ${{ secrets.LINKS }}
+          ---
+          EOF
+          # Debug output
+          cat src/content/bios/${{ secrets.USERNAME }}.md
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+          git add src/content/bios/${{ secrets.USERNAME }}.md
+          git commit -m "Add bio for @${{ secrets.USERNAME }}" || echo "No changes to commit"
+          git push
+
+      - name: Close issue with comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueBody = context.payload.issue.body;
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            core.exportVariable('USERNAME', username);
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
+              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${{username}}](https://blahaj.bio/@${{username}}`
+            });
+            
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
