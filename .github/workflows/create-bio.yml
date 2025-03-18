@@ -84,19 +84,15 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const issueBody = context.payload.issue.body;
-            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
-            const username = usernameMatch ? usernameMatch[1].trim() : '';
-            core.exportVariable('USERNAME', username);
+            const username = process.env.USERNAME;
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
-              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${{username}}](https://blahaj.bio/@${{username}}`
             });
-            
+
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
