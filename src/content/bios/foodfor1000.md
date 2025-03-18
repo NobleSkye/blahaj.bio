@@ -5,7 +5,7 @@ pronouns: "She/her"
 bio: Uh 3d printer or something idk
   
 links: |
-  Skye not everyone has 20 domains to show off
-  yeah well too bad
+  https://Skye-not-everyone-has-20-domains-to-show-off.catgirl
+  https://yeah-well-too-bad.lol
   https://skyenet.co.in
 ---
