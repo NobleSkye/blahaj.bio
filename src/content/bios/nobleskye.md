@@ -7,4 +7,8 @@ links: |
   https://nobleskye.dev
   https://blahaj.bio/@blahaj
   https://bsky.app/profile/nobleskye.dev
+  https://estrogen.email
+  https://blahajs.gay
+  https://store.skyenet.co.in
+  https://skyenet.co.in
 ---
