@@ -84,7 +84,10 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const username = process.env.USERNAME;
+            const issueBody = context.payload.issue.body;
+            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
+            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            core.exportVariable('USERNAME', username);
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
