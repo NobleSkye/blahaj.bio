@@ -1,67 +1,48 @@
 name: Create Bio
-
-on:
-  workflow_dispatch:
-    inputs:
-      username:
-        description: "Your desired username (only letters, numbers, and hyphens)"
-        required: true
-        type: string
-      display_name:
-        description: "Your display name"
-        required: true
-        type: string
-      pronouns:
-        description: "Your pronouns"
-        required: true
-        type: string
-      bio:
-        description: "Tell us about yourself"
-        required: true
-        type: string
-      links:
-        description: "Website links (one per line)"
-        required: false
-        type: string
-
-jobs:
-  create_bio:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    
-    - name: Create bio file
-      run: |
-        # Fetch input values
-        USERNAME="${{ github.event.inputs.username }}"
-        DISPLAY_NAME="${{ github.event.inputs.display_name }}"
-        PRONOUNS="${{ github.event.inputs.pronouns }}"
-        BIO="${{ github.event.inputs.bio }}"
-        LINKS="${{ github.event.inputs.links }}"
-
-        # Define the directory and file path
-        FILE_PATH="src/content/bios/${USERNAME}.md"
-        
-        # Create the bio content in markdown format
-        echo "---" > $FILE_PATH
-        echo "username: \"$USERNAME\"" >> $FILE_PATH
-        echo "display_name: \"$DISPLAY_NAME\"" >> $FILE_PATH
-        echo "pronouns: \"$PRONOUNS\"" >> $FILE_PATH
-        echo "bio: |" >> $FILE_PATH
-        echo "  $BIO" >> $FILE_PATH
-
-        if [ -n "$LINKS" ]; then
-          echo "links: |" >> $FILE_PATH
-          echo "  $LINKS" >> $FILE_PATH
-        fi
-        
-        echo "---" >> $FILE_PATH
-
-        # Commit the file to the repository
-        git config --global user.email "actions@skye.host"
-        git config --global user.name "Github-Actions"
-        git add $FILE_PATH
-        git commit -m "Create bio for $USERNAME"
-        git push
+description: Create your Blahaj.bio profile
+title: "[Bio]: "
+labels: ["bio-creation"]
+body:
+  - type: input
+    id: username
+    attributes:
+      label: Username
+      description: Your desired username (only letters, numbers, and hyphens)
+      placeholder: "blahaj-lover"
+    validations:
+      required: true
+  - type: input
+    id: display_name
+    attributes:
+      label: Display Name
+      description: Your display name
+      placeholder: "Blahaj Enthusiast"
+    validations:
+      required: true
+  - type: input
+    id: pronouns
+    attributes:
+      label: Pronouns
+      description: Your pronouns
+      placeholder: "they/them"
+    validations:
+      required: true
+  - type: textarea
+    id: bio
+    attributes:
+      label: Bio
+      description: Tell us about yourself
+      placeholder: "I love Blahaj and coding!"
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Website Links
+      description: One link per line
+      placeholder: |
+        https://github.com/username
+        https://example.com
+        https://bsky.app/profile/username
+    validations:
+      required: false
