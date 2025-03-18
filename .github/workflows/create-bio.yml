@@ -1,53 +1,3 @@
-<<<<<<< HEAD
-name: Create Bio
-description: Create your Blahaj.bio profile
-title: "[Bio]: "
-labels: ["bio-creation"]
-body:
-  - type: input
-    id: username
-    attributes:
-      label: Username
-      description: Your desired username (only letters, numbers, and hyphens)
-      placeholder: "blahaj-lover"
-    validations:
-      required: true
-  - type: input
-    id: display_name
-    attributes:
-      label: Display Name
-      description: Your display name
-      placeholder: "Blahaj Enthusiast"
-    validations:
-      required: true
-  - type: input
-    id: pronouns
-    attributes:
-      label: Pronouns
-      description: Your pronouns
-      placeholder: "they/them"
-    validations:
-      required: true
-  - type: textarea
-    id: bio
-    attributes:
-      label: Bio
-      description: Tell us about yourself
-      placeholder: "I love Blahaj and coding!"
-    validations:
-      required: true
-  - type: textarea
-    id: links
-    attributes:
-      label: Website Links
-      description: One link per line
-      placeholder: |
-        https://github.com/username
-        https://example.com
-        https://bsky.app/profile/username
-    validations:
-      required: false
-=======
 name: Create Bio Page
 
 on:
@@ -134,10 +84,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const issueBody = context.payload.issue.body;
-            const usernameMatch = issueBody.match(/Username:\s*([a-zA-Z0-9-]+)/);
-            const username = usernameMatch ? usernameMatch[1].trim() : '';
-            core.exportVariable('USERNAME', username);
+            const username = process.env.USERNAME;
             
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -152,4 +99,3 @@ jobs:
               issue_number: context.issue.number,
               state: 'closed'
             });
->>>>>>> 48240988a754eecbc99b18979c9dc8420fe40cf8
