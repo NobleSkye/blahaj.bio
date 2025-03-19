@@ -90,7 +90,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `✨ Your bio page has been created! View it at [blahaj.bio/@${username}](https://blahaj.bio/@${username})`
+              body: `Your bio has been submited, itll be added shortly (github actions broken so gotta manully do it) you can view your bio at https://blahaj.bio/@{{username}} shorly`
             });
 
             await github.rest.issues.update({
