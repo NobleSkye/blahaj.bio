@@ -18,3 +18,17 @@ Blahaj.bio offers a simple way to create a personalized bio page with a unique U
 ### Example Bio Page
 
 - Skye's Bio: [https://blahaj.bio/@nobleskye](https://blahaj.bio/@nobleskye)
+
+
+
+
+## actual issues
+- if there is actual issues with this project just make a new issue without the "bio-creation" label and a page wont be created for it
+- - any other features just make a pr and ill review it once i see it,
+ 
+## future plans
+- add pfps,
+- add markdown support,
+- make the layout better
+- login system with github to change live (so when you click save it sends a issue to update it)
+- get more people using it
