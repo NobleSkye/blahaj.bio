@@ -19,12 +19,24 @@ Blahaj.bio offers a simple way to create a personalized bio page with a unique U
 
 - Skye's Bio: [https://blahaj.bio/@nobleskye](https://blahaj.bio/@nobleskye)
 
+# Important Info
+
+### to edit your page:
+- make a pr editing your page, and ill get to adding it,
 
 
+
+### abuse
+- if found out that you are impersonating smeone then you will not be allowed to make a bio page.
+- or to make fun of someone, any hate to anyone, or group of people, being transgender, lgbtq, black, white, anything of the sort will also get you blacklisted, on here and future projects
 
 ## actual issues
 - if there is actual issues with this project just make a new issue without the "bio-creation" label and a page wont be created for it
 - - any other features just make a pr and ill review it once i see it,
+
+
+
+
  
 ## future plans
 - add pfps,
