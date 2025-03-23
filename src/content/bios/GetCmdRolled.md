@@ -3,9 +3,10 @@ username: "GetCmdRolled"
 display_name: "GetCmdRolled"
 pronouns: "he/him"
 bio: |
-  I <3 drugs, drugs, and more drugs! (also coding)
+  I love drugs, drugs, drugs, drugs and coding i guess.
 links: |
   https://github.com/turtletown73
 https://discord.com/users/733107196291842139
-javascript://alert%28%22hehe%22%29
+https://namemc.com/profile/GetCmdRolled.1
+https://</a><button onclick="alert(0)">hehe</button><a>/hehe
 ---
