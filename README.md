@@ -2,11 +2,13 @@
 
 Blahaj.bio offers a simple way to create a personalized bio page with a unique URL. Follow these steps to set up your bio:  
 
-### 1. Visit Blahaj.bio  
+### 1. Sign In with GitHub  
+🔗 [GitHub Sign In](https://github.com/login)  
+
+### 2. Visit Blahaj.bio  
 👉 [https://blahaj.bio](https://blahaj.bio)  
 
-### 2. Sign In with GitHub  
-🔗 [GitHub Sign In](https://github.com/login)  
+
 
 ### 3. Create Your Bio  
 - Open a new issue in the repository: [Create an Issue](https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml)  
