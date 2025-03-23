@@ -7,7 +7,7 @@ body:
     id: username
     attributes:
       label: Username
-      description: Your desired username (only letters, numbers, and hyphens)
+      description: Your desired username (only letters, numbers, and hyphens) blahaj.io/@blahaj
       placeholder: "blahaj-lover"
     validations:
       required: true
@@ -15,7 +15,7 @@ body:
     id: display_name
     attributes:
       label: Display Name
-      description: Your display name
+      description: Your display name | can be capital and have other symbols
       placeholder: "Blahaj Enthusiast"
     validations:
       required: true
@@ -23,8 +23,8 @@ body:
     id: pronouns
     attributes:
       label: Pronouns
-      description: Your pronouns
-      placeholder: "they/them"
+      description: Your pronouns | He/him | She/Her | They/Them | He/They | She/They | any/all | other/pronouns 
+      placeholder: "They/Them"
     validations:
       required: true
   - type: textarea
@@ -41,9 +41,9 @@ body:
       label: Website Links
       description: One link per line
       placeholder: |
-        https://github.com/username
-        https://example.com
-        https://bsky.app/profile/username
+        https://github.com/nobleskye/blahaj.bio
+        https://nobleskye.dev
+        https://bsky.app/profile/nobleskye.dev
     validations:
       required: false
   - type: checkboxes

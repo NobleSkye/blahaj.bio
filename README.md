@@ -5,20 +5,20 @@ Blahaj.bio offers a simple way to create a personalized bio page with a unique U
 ### 1. Sign In with GitHub  
 🔗 [GitHub Sign In](https://github.com/login)  
 
-### 2. Visit Blahaj.bio  
+### 2. Create Your Bio  
+- Open a new issue in the repository: [Create an Issue](https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml)  
+- Follow the template to enter your bio details. 
+
+
+### 3. Submit  
+Once you've filled out your bio, submit the issue.  
+
+### 4. Visit Blahaj.bio  
 👉 [https://blahaj.bio](https://blahaj.bio)  
 
 
-
-### 3. Create Your Bio  
-- Open a new issue in the repository: [Create an Issue](https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml)  
-- Follow the template to enter your bio details.  
-
-### 4. Submit  
-Once you've filled out your bio, submit the issue.  
-
 ### 5. Access Your Bio Page  
-You'll receive a message on your issue once GitHub Actions finishes processing your bio. Your page will be available at:  
+You'll receive a message on your issue once GitHub Actions finishes processing your bio. Your page will be available at:  blahaj.bio/@YOUR_USERNAME
 📌 **Example Bio Page**: [Skye's Bio](https://blahaj.bio/@nobleskye)  
 
 ---
@@ -43,11 +43,12 @@ To update your bio:
 ---
 
 ## Future Plans  
-✅ Profile pictures (PFPs)  
-✅ Markdown support  
-✅ Improved layout  
-✅ GitHub-based login system for live updates  
-✅ Expanding the community  
+- Profile pictures
+- Markdown support  
+- Improved layout  
+- Edit profiles live
+- GitHub-based login system for live updates  
+- Expanding the community  
 
 ---
 
