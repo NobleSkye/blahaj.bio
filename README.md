@@ -1,46 +1,59 @@
-# How to Create Your Bio Page on Blahaj.bio
+# How to Create Your Bio Page on Blahaj.bio  
 
-Blahaj.bio offers a simple way to create a personalized bio page with a unique URL. Follow these steps to set up your bio:
+Blahaj.bio offers a simple way to create a personalized bio page with a unique URL. Follow these steps to set up your bio:  
 
-1. **Visit Blahaj.bio**: [https://blahaj.bio](https://blahaj.bio)
+### 1. Visit Blahaj.bio  
+👉 [https://blahaj.bio](https://blahaj.bio)  
 
-2. **Sign In with GitHub**: [GitHub Sign In](https://github.com/login)
+### 2. Sign In with GitHub  
+🔗 [GitHub Sign In](https://github.com/login)  
 
-3. **Create Your Bio**:
-   - Open a new issue in the repository: [Create an Issue](https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml)
-   - Follow the provided template to enter your bio details.
+### 3. Create Your Bio  
+- Open a new issue in the repository: [Create an Issue](https://github.com/nobleskye/blahaj.bio/issues/new?template=create-bio.yml)  
+- Follow the template to enter your bio details.  
 
-4. **Submit**: Once you have filled out your bio, submit the issue.
+### 4. Submit  
+Once you've filled out your bio, submit the issue.  
 
-5. **Access Your Bio Page**: You will receive a message on your issue once GitHub Actions finishes processing your bio. Your bio page will then be available at:
+### 5. Access Your Bio Page  
+You'll receive a message on your issue once GitHub Actions finishes processing your bio. Your page will be available at:  
+📌 **Example Bio Page**: [Skye's Bio](https://blahaj.bio/@nobleskye)  
 
+---
 
-### Example Bio Page
+## Editing Your Page  
+To update your bio:  
+- Create a **pull request (PR)** with your changes.  
+- Once reviewed, your updates will be applied.  
 
-- Skye's Bio: [https://blahaj.bio/@nobleskye](https://blahaj.bio/@nobleskye)
+---
 
-# Important Info
+## Rules & Guidelines  
 
-### to edit your page:
-- make a pr editing your page, and ill get to adding it,
+### 🚫 No Impersonation or Hate Speech  
+- Impersonating someone else is strictly prohibited.  
+- Any form of hate speech, discrimination, or harassment (based on gender identity, race, LGBTQ+ status, etc.) will result in a permanent blacklist from this and future projects.  
 
+### 🛠 Reporting Issues  
+- If you encounter an issue with the project, **create a new issue** **without** the `"bio-creation"` label, and a bio page won’t be created.  
+- Feature requests? Submit a **pull request (PR)** for review.  
 
+---
 
-### abuse
-- if found out that you are impersonating smeone then you will not be allowed to make a bio page.
-- or to make fun of someone, any hate to anyone, or group of people, being transgender, lgbtq, black, white, anything of the sort will also get you blacklisted, on here and future projects
+## Future Plans  
+✅ Profile pictures (PFPs)  
+✅ Markdown support  
+✅ Improved layout  
+✅ GitHub-based login system for live updates  
+✅ Expanding the community  
 
-## actual issues
-- if there is actual issues with this project just make a new issue without the "bio-creation" label and a page wont be created for it
-- - any other features just make a pr and ill review it once i see it,
+---
 
+## Terms of Use  
+By using Blahaj.bio, you agree to follow the rules, which include:  
+- No hate speech, discrimination, or abuse.  
+- No misuse of URLs for malicious purposes.  
+- Respectful and appropriate content only.  
 
-
-
- 
-## future plans
-- add pfps,
-- add markdown support,
-- make the layout better
-- login system with github to change live (so when you click save it sends a issue to update it)
-- get more people using it
+# License
+https://github.com/NobleSkye/Nobleskye/blob/main/license.md
