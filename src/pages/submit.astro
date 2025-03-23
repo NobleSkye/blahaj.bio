@@ -1,0 +1,136 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Blahaj.bio - Create Your Bio Page">
+  <div class="min-h-screen flex flex-col">
+    <main class="flex-grow bg-gradient-to-br from--100 to-purple-100 py-16">
+      <div class="max-w-3xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Blahaj.bio
+          </h1>
+          <p class="text-xl text-white-700 mb-8">
+            Create your personal bio page in seconds
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <form id="bioForm" class="space-y-6">
+            <div>
+              <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                required
+                pattern="[a-zA-Z0-9-]+"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="blahaj-lover"
+              />
+              <p class="mt-1 text-sm text-gray-500">Only letters, numbers, and hyphens allowed</p>
+            </div>
+
+            <div>
+              <label for="display_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Display Name
+              </label>
+              <input
+                type="text"
+                id="display_name"
+                name="display_name"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="Blahaj Enthusiast"
+              />
+            </div>
+
+            <div>
+              <label for="pronouns" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Pronouns
+              </label>
+              <input
+                type="text"
+                id="pronouns"
+                name="pronouns"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="they/them"
+              />
+            </div>
+
+            <div>
+              <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Bio
+              </label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                required
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="I love Blahaj and coding!"
+              ></textarea>
+            </div>
+
+            <div>
+              <label for="links" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Website Links
+              </label>
+              <textarea
+                id="links"
+                name="links"
+                rows="3"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
+                placeholder="https://github.com/username&#10;https://example.com"
+              ></textarea>
+              <p class="mt-1 text-sm text-gray-500">One link per line</p>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex items-center h-5">
+                <input
+                  id="terms"
+                  name="terms"
+                  type="checkbox"
+                  required
+                  class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+              </div>
+              <div class="ml-3">
+                <label for="terms" class="text-sm text-gray-700 dark:text-gray-300">
+                  I agree to follow the <a href="https://github.com/nobleskye/blahaj.bio/code_of_conduct.md" class="text-blue-600 hover:text-blue-500">Code of Conduct</a>
+                </label>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full px-4 py-2 text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg hover:opacity-90 transition-opacity"
+            >
+              Create Bio Page
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const form = document.getElementById('bioForm');
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const title = `[Bio]: ${formData.get('username')}`;
+        const body = `### Username\n${formData.get('username')}\n\n### Display Name\n${formData.get('display_name')}\n\n### Pronouns\n${formData.get('pronouns')}\n\n### Bio\n${formData.get('bio')}\n\n### Website Links\n${formData.get('links')}`;
+        
+        const issueUrl = `https://github.com/nobleskye/blahaj.bio/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=bio-creation`;
+        
+        window.location.href = issueUrl;
+      });
+    </script>
+  </div>
+</Layout>
