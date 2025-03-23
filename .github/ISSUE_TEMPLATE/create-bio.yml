@@ -47,9 +47,9 @@ body:
     validations:
       required: false
   - type: checkbox
-    id: tos
+    id: agree
     attributes:
       label: I Agree to the TOS & Privacy Policy
       description: Have you read the rules and restrictions to making a bio page?
     validations:
-      required: false
+      required: true
