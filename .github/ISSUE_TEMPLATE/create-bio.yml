@@ -46,7 +46,7 @@ body:
         https://bsky.app/profile/username
     validations:
       required: false
-  - type: checkbox
+  - type: checkboxes
     id: agree
     attributes:
       label: I Agree to the TOS & Privacy Policy
