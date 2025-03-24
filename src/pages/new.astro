@@ -84,7 +84,7 @@ import Layout from '../layouts/Layout.astro';
                 name="links"
                 rows="3"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-                placeholder=" https://github.com/NobleSkye&#10;https://blahaj.bio&#10;https://bsky.app/profile/NobleSkye.dev"
+                placeholder=" https://github.com/NobleSkye&#10; https://blahaj.bio&#10; https://bsky.app/profile/NobleSkye.dev"
               ></textarea>
               <p class="mt-1 text-sm text-gray-500">One link per line</p>
             </div>
@@ -126,7 +126,7 @@ import Layout from '../layouts/Layout.astro';
         const formData = new FormData(form);
         const title = `[Bio]: ${formData.get('username')}`;
         const body = `### Username\n${formData.get('username')}\n\n### Display Name\n${formData.get('display_name')}\n\n### Pronouns\n${formData.get('pronouns')}\n\n### Bio\n${formData.get('bio')}\n\n### Website Links\n${formData.get('links')}`;
-        d
+        
         const issueUrl = `https://github.com/nobleskye/blahaj.bio/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}&labels=bio-creation`;
         
         window.location.href = issueUrl;
