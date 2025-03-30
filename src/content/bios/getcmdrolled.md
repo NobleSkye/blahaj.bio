@@ -1,10 +1,12 @@
 ---
 username: "getcmdrolled"
 display_name: "GetCmdRolled"
-pronouns: "He/Them"
-bio: |
-  I am it, destroyer of worlds
+pronouns: "He/Him"
+bio: 
+    I love drugs and coding!
 links: |
-  https://selfpromo.cantstop.me
-https://skyenet.co.in
+    https://github.com/turtletown73
+    https://discord.com/users/733107196291842139
+    https://namemc.com/profile/GetCmdRolled.1
+  
 ---
