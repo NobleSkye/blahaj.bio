@@ -10,6 +10,8 @@ bio:
   
 links: |
     https://pyro.host/
-    https://status.pyro.host/
-    https://crab.fit/
+    https://pyro.host/aup
+    https://pyro.host/privacy
+    https://pyro.host/terms
+    https://pyro.host/sla
 ---
