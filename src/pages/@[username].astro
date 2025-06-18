@@ -42,25 +42,40 @@ if (!bio) {
           
           {bio.links && (
             <div class="space-y-3">
-              {bio.links.split('\n').map(link => {
-                const trimmedLink = link.trim();
-                if (!trimmedLink) return null;
-                try {
-                  const url = new URL(trimmedLink);
-                  return (
-                    <a
-                      href={trimmedLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-                    >
-                      {url.hostname.replace('www.', '')}
-                    </a>
-                  );
-                } catch {
-                  return null;
-                }
-              })}
+              {Array.isArray(bio.links) ? (
+                // Handle structured links with titles
+                bio.links.map(link => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
+                  >
+                    {link.title}
+                  </a>
+                ))
+              ) : (
+                // Handle simple string links (backward compatibility)
+                bio.links.split('\n').map(link => {
+                  const trimmedLink = link.trim();
+                  if (!trimmedLink) return null;
+                  try {
+                    const url = new URL(trimmedLink);
+                    return (
+                      <a
+                        href={trimmedLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
+                      >
+                        {url.hostname.replace('www.', '')}
+                      </a>
+                    );
+                  } catch {
+                    return null;
+                  }
+                })
+              )}
             </div>
           )}
         </div>

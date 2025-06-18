@@ -8,7 +8,13 @@ export const collections = {
       display_name: z.string(),
       pronouns: z.string(),
       bio: z.string(),
-      links: z.string().optional(),
+      links: z.union([
+        z.string(), // For backward compatibility with simple link strings
+        z.array(z.object({
+          title: z.string(),
+          url: z.string(),
+        }))
+      ]).optional(),
     }),
   }),
 };
