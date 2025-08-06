@@ -1,0 +1,146 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { SignedIn, SignedOut, UserProfile } from "@clerk/astro/components";
+---
+
+<SiteLayout title="Billing & Plans - Blähaj.bio">
+  <div class="min-h-screen bg-github-canvas-default py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-bold text-github-fg-default mb-6">
+          Billing & Plans
+        </h1>
+        <p class="text-xl text-github-fg-muted max-w-2xl mx-auto">
+          Choose your plan and manage your subscription through Clerk
+        </p>
+      </div>
+
+      <SignedOut>
+        <!-- Pricing Plans for Signed Out Users -->
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
+          
+          <!-- Free Plan -->
+          <div class="bg-github-canvas-overlay rounded-2xl p-8 border border-github-border-default relative">
+            <div class="text-center">
+              <h3 class="text-2xl font-bold text-github-fg-default mb-2">Free</h3>
+              <div class="mb-6">
+                <span class="text-4xl font-bold text-github-fg-default">$0</span>
+                <span class="text-github-fg-muted">/month</span>
+              </div>
+              <p class="text-github-fg-muted mb-8">Perfect for getting started</p>
+            </div>
+            
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Personal bio page</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Basic customization</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Community support</span>
+              </li>
+            </ul>
+            
+            <a
+              href="/register"
+              class="w-full py-3 px-6 rounded-lg border-2 border-github-border-default text-github-fg-default hover:bg-github-canvas-subtle font-semibold transition-colors text-center block"
+            >
+              Get started
+            </a>
+          </div>
+
+          <!-- Supporter Plan -->
+          <div class="bg-github-canvas-overlay rounded-2xl p-8 border-2 border-github-accent-emphasis relative">
+            <!-- Popular badge -->
+            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <span class="bg-github-accent-emphasis text-white px-4 py-1 rounded-full text-sm font-semibold">
+                Most Popular
+              </span>
+            </div>
+            
+            <div class="text-center">
+              <h3 class="text-2xl font-bold text-github-fg-default mb-2">Supporter</h3>
+              <div class="mb-6">
+                <span class="text-4xl font-bold text-github-fg-default">$5</span>
+                <span class="text-github-fg-muted">/month</span>
+              </div>
+              <p class="text-github-fg-muted mb-8">For creators who want more customization</p>
+            </div>
+            
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Everything in Free</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default"><strong>Custom CSS backgrounds</strong></span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Priority support</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Early access to features</span>
+              </li>
+              <li class="flex items-center">
+                <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span class="text-github-fg-default">Support the project</span>
+              </li>
+            </ul>
+            
+            <a
+              href="/register"
+              class="w-full py-3 px-6 rounded-lg bg-github-accent-emphasis hover:bg-github-accent-fg text-white font-semibold transition-colors text-center block"
+            >
+              Start free trial
+            </a>
+          </div>
+        </div>
+
+        <!-- Sign in prompt -->
+        <div class="text-center bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-github-border-default">
+          <h2 class="text-2xl font-bold text-github-fg-default mb-4">Sign in to manage billing</h2>
+          <p class="text-github-fg-muted mb-6">Access your subscription and billing settings</p>
+          <a
+            href="/login"
+            class="inline-block py-3 px-6 rounded-lg bg-github-accent-emphasis hover:bg-github-accent-fg text-white font-semibold transition-colors"
+          >
+            Sign In
+          </a>
+        </div>
+      </SignedOut>
+      
+      <SignedIn>
+        <!-- Clerk's UserProfile component with billing focus -->
+        <div class="flex justify-center">
+          <UserProfile />
+        </div>
+      </SignedIn>
+    </div>
+  </div>
+</SiteLayout>
+
