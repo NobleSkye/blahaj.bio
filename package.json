@@ -10,10 +10,13 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^9.3.3",
     "@astrojs/tailwind": "^5.1.0",
+    "@clerk/astro": "^2.10.13",
     "@octokit/core": "^5.1.0",
     "@octokit/rest": "^20.0.2",
     "astro": "^5.7.5",
+    "convex": "^1.25.4",
     "gray-matter": "^4.0.3",
     "tailwindcss": "^3.4.1",
     "yaml": "^2.3.4"

@@ -1,0 +1,291 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { Protect } from "@clerk/astro/components";
+---
+
+<SiteLayout title="Dashboard - Blahaj.bio">
+  <Protect>
+    <div class="py-16">
+      <div class="max-w-4xl mx-auto px-4">
+        
+        <!-- Dashboard Header -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-github-fg-default mb-4">
+            Bio Dashboard
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-github-fg-muted">
+            Manage your personal bio page
+          </p>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="grid lg:grid-cols-3 gap-8">
+          
+          <!-- Bio Form -->
+          <div class="lg:col-span-2">
+            <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default">
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-github-fg-default mb-6">Edit Your Bio</h2>
+              
+              <form id="bioForm" class="space-y-6">
+                <!-- Display Name -->
+                <div>
+                  <label for="display_name" class="block text-sm font-medium text-gray-700 dark:text-github-fg-default mb-2">
+                    Display Name
+                  </label>
+                  <input
+                    type="text"
+                    id="display_name"
+                    name="display_name"
+                    required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-github-border-default bg-white dark:bg-github-canvas-default text-gray-900 dark:text-github-fg-default focus:ring-2 focus:ring-github-accent-emphasis focus:border-transparent"
+                    placeholder="Your display name"
+                  />
+                </div>
+
+                <!-- Pronouns -->
+                <div>
+                  <label for="pronouns" class="block text-sm font-medium text-gray-700 dark:text-github-fg-default mb-2">
+                    Pronouns
+                  </label>
+                  <input
+                    type="text"
+                    id="pronouns"
+                    name="pronouns"
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-github-border-default bg-white dark:bg-github-canvas-default text-gray-900 dark:text-github-fg-default focus:ring-2 focus:ring-github-accent-emphasis focus:border-transparent"
+                    placeholder="they/them, she/her, he/him, etc."
+                  />
+                </div>
+
+                <!-- Bio -->
+                <div>
+                  <label for="bio" class="block text-sm font-medium text-gray-700 dark:text-github-fg-default mb-2">
+                    Bio
+                  </label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    rows="6"
+                    required
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-github-border-default bg-white dark:bg-github-canvas-default text-gray-900 dark:text-github-fg-default focus:ring-2 focus:ring-github-accent-emphasis focus:border-transparent"
+                    placeholder="Tell us about yourself..."
+                  ></textarea>
+                </div>
+
+                <!-- Website Links -->
+                <div>
+                  <label for="links" class="block text-sm font-medium text-gray-700 dark:text-github-fg-default mb-2">
+                    Website Links
+                  </label>
+                  <textarea
+                    id="links"
+                    name="links"
+                    rows="4"
+                    class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-github-border-default bg-white dark:bg-github-canvas-default text-gray-900 dark:text-github-fg-default focus:ring-2 focus:ring-github-accent-emphasis focus:border-transparent"
+                    placeholder="https://github.com/yourusername&#10;https://yourwebsite.com&#10;One link per line"
+                  ></textarea>
+                  <p class="mt-2 text-sm text-gray-500 dark:text-github-fg-subtle">One link per line</p>
+                </div>
+
+                <!-- Save Button -->
+                <div class="flex gap-4">
+                  <button
+                    type="submit"
+                    class="flex-1 bg-github-success-emphasis hover:bg-github-success-fg text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Save Bio
+                  </button>
+                  <button
+                    type="button"
+                    id="previewBtn"
+                    class="bg-github-accent-emphasis hover:bg-github-accent-fg text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    Preview
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="space-y-6">
+            
+            <!-- Profile Info -->
+            <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-github-border-default">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default mb-4">Profile Info</h3>
+              <div id="userInfo" class="space-y-4">
+                <!-- Will be populated by JavaScript -->
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-github-border-default">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default mb-4">Quick Actions</h3>
+              <div class="space-y-3">
+                <a
+                  href="/preview"
+                  class="block w-full text-center py-2 px-4 rounded-lg bg-github-accent-emphasis hover:bg-github-accent-fg text-white transition-colors"
+                >
+                  View Public Profile
+                </a>
+                <button
+                  id="copyLinkBtn"
+                  class="block w-full text-center py-2 px-4 rounded-lg border border-github-border-default text-gray-700 dark:text-github-fg-default hover:bg-gray-50 dark:hover:bg-github-canvas-subtle transition-colors"
+                >
+                  Copy Profile Link
+                </button>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-github-border-default">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default mb-4">Stats</h3>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <span class="text-gray-600 dark:text-github-fg-muted">Profile Views</span>
+                  <span class="font-semibold text-gray-900 dark:text-github-fg-default">--</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600 dark:text-github-fg-muted">Last Updated</span>
+                  <span class="font-semibold text-gray-900 dark:text-github-fg-default" id="lastUpdated">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Wait for Clerk to load (it's automatically initialized by @clerk/astro)
+      const waitForClerk = (): Promise<any> => {
+        return new Promise((resolve) => {
+          if (window.Clerk && window.Clerk.user) {
+            resolve(window.Clerk);
+          } else {
+            setTimeout(() => resolve(waitForClerk()), 100);
+          }
+        });
+      };
+
+      // Get user info and populate sidebar
+      const clerk = await waitForClerk();
+      const user = clerk.user;
+      if (user) {
+        const userInfoDiv = document.getElementById('userInfo');
+        userInfoDiv.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <img src="${user.imageUrl}" alt="Profile" class="w-12 h-12 rounded-full">
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-github-fg-default">${user.fullName || user.username}</p>
+              <p class="text-sm text-gray-600 dark:text-github-fg-muted">@${user.username}</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-gray-200 dark:border-github-border-default">
+            <p class="text-sm text-gray-600 dark:text-github-fg-muted">
+              Your bio URL: <br>
+              <code class="text-xs bg-gray-100 dark:bg-github-canvas-default px-2 py-1 rounded">
+                blahaj.bio/@${user.username}
+              </code>
+            </p>
+          </div>
+        `;
+
+        // Load existing bio data
+        loadBioData(user.username);
+      }
+
+      // Copy profile link functionality
+      document.getElementById('copyLinkBtn').addEventListener('click', () => {
+        if (user) {
+          const profileUrl = `${window.location.origin}/@${user.username}`;
+          navigator.clipboard.writeText(profileUrl).then(() => {
+            // Show success feedback
+            const btn = document.getElementById('copyLinkBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('bg-github-success-emphasis', 'text-white');
+            setTimeout(() => {
+              btn.textContent = originalText;
+              btn.classList.remove('bg-github-success-emphasis', 'text-white');
+            }, 2000);
+          });
+        }
+      });
+
+      // Preview button
+      document.getElementById('previewBtn').addEventListener('click', () => {
+        if (user) {
+          window.open(`/@${user.username}`, '_blank');
+        }
+      });
+
+      // Form submission
+      document.getElementById('bioForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!user) return;
+
+        const formData = new FormData(e.target);
+        const bioData = {
+          username: user.username,
+          display_name: formData.get('display_name'),
+          pronouns: formData.get('pronouns'),
+          bio: formData.get('bio'),
+          links: formData.get('links'),
+          profile_image: user.imageUrl,
+          full_name: user.fullName,
+          updated_at: new Date().toISOString()
+        };
+
+        try {
+          // Save to localStorage for now (in production, save to your database)
+          localStorage.setItem(`bio_${user.username}`, JSON.stringify(bioData));
+          
+          // Show success message
+          showNotification('Bio saved successfully!', 'success');
+          
+          // Update last updated time
+          document.getElementById('lastUpdated').textContent = 'Just now';
+        } catch (error) {
+          console.error('Error saving bio:', error);
+          showNotification('Error saving bio. Please try again.', 'error');
+        }
+      });
+
+      // Load existing bio data
+      function loadBioData(username) {
+        try {
+          const savedBio = localStorage.getItem(`bio_${username}`);
+          if (savedBio) {
+            const bioData = JSON.parse(savedBio);
+            document.getElementById('display_name').value = bioData.display_name || '';
+            document.getElementById('pronouns').value = bioData.pronouns || '';
+            document.getElementById('bio').value = bioData.bio || '';
+            document.getElementById('links').value = bioData.links || '';
+            
+            if (bioData.updated_at) {
+              const lastUpdated = new Date(bioData.updated_at);
+              document.getElementById('lastUpdated').textContent = lastUpdated.toLocaleDateString();
+            }
+          }
+        } catch (error) {
+          console.error('Error loading bio data:', error);
+        }
+      }
+
+      // Notification system
+      function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transition-opacity ${
+          type === 'success' ? 'bg-github-success-emphasis' : 'bg-github-danger-emphasis'
+        }`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.opacity = '0';
+          setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+      }
+    </script>
+  </Protect>
+</SiteLayout>

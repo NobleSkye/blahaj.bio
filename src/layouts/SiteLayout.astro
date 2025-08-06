@@ -1,0 +1,70 @@
+---
+import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/astro/components";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-white dark:bg-github-canvas-default text-gray-900 dark:text-github-fg-default min-h-screen">
+    <header class="flex justify-between items-center p-4 bg-white dark:bg-github-canvas-overlay border-b border-gray-200 dark:border-github-border-default shadow-sm">
+      <a href="/" class="text-2xl font-bold text-gray-900 dark:text-github-fg-default hover:text-blue-600 dark:hover:text-github-accent-fg transition-colors">
+        Blahaj.bio
+      </a>
+      <nav class="flex items-center space-x-4">
+        <SignedOut>
+          <div class="flex items-center space-x-4">
+            <a href="/about" class="text-gray-600 dark:text-github-fg-muted hover:text-github-accent-emphasis transition-colors">
+              About
+            </a>
+            <a
+              href="/login"
+              class="bg-github-success-emphasis hover:bg-github-success-fg text-white px-4 py-2 rounded-md transition-colors font-medium"
+            >
+              Sign In
+            </a>
+          </div>
+        </SignedOut>
+        <SignedIn>
+          <div class="flex items-center space-x-4">
+            <a 
+              href="/dashboard" 
+              class="text-gray-600 dark:text-github-fg-muted hover:text-github-accent-emphasis transition-colors font-medium"
+            >
+              Dashboard
+            </a>
+            <a 
+              href="/preview" 
+              class="text-gray-600 dark:text-github-fg-muted hover:text-github-accent-emphasis transition-colors font-medium"
+            >
+              Preview
+            </a>
+            <UserButton 
+              appearance={{
+                elements: {
+                  avatarBox: "w-8 h-8",
+                  userButtonPopoverCard: "bg-white dark:bg-github-canvas-overlay",
+                  userButtonPopoverText: "text-gray-900 dark:text-github-fg-default"
+                }
+              }}
+            />
+          </div>
+        </SignedIn>
+      </nav>
+    </header>
+    <main class="flex-1">
+      <slot />
+    </main>
+  </body>
+</html>
