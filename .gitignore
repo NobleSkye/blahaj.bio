@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+.env.local
+
+
+# Removed Files
+*.disabled
+/*.disabled

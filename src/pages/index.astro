@@ -1,121 +1,61 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
-import { SignedIn, SignedOut } from "@clerk/astro/components";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<SiteLayout title="Blahaj.bio - Create Your Bio Page">
-  <div class="py-16">
-    <div class="max-w-4xl mx-auto px-4">
-      
-      <!-- Hero Section -->
-      <div class="text-center mb-16">
-        <h1 class="text-6xl font-bold text-gray-900 dark:text-github-fg-default mb-6">
-          Blahaj.bio
-        </h1>
-        <p class="text-2xl text-gray-600 dark:text-github-fg-muted mb-12">
-          Create your personal bio page with Clerk authentication
-        </p>
-        
-        <!-- Different CTAs for signed in/out users -->
-        <SignedOut>
+<Layout title="Blahaj.bio - Create Your Bio Page">
+  <div class="min-h-screen flex flex-col">
+    <main class="flex-grow bg-gradient-to-br from--100 to-purple-100 py-16">
+      <div class="max-w-3xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl font-bold text-gray-900 mb-4">
+            Blahaj.bio
+          </h1>
+          <p class="text-xl text-white-700 mb-8">
+            Create your personal bio page in seconds using GitHub Issues
+          </p>
           <div class="space-y-4">
-            <p class="text-lg text-gray-700 dark:text-github-fg-muted mb-8">
-              Sign in to create your personalized bio page
-            </p>
             <a
-              href="/login"
-              class="inline-block px-8 py-4 bg-github-success-emphasis hover:bg-github-success-fg text-white text-lg font-semibold rounded-lg transition-colors"
+              href="/new"
+              class="inline-block px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg font-semibold rounded-lg hover:opacity-90 transition-opacity"
             >
-              Get Started - Sign In
+              Get Started
             </a>
           </div>
-        </SignedOut>
-        
-        <SignedIn>
-          <div class="space-y-4">
-            <p class="text-lg text-gray-700 dark:text-github-fg-muted mb-8">
-              Welcome back! Manage your bio page
-            </p>
-            <div class="flex gap-4 justify-center">
-              <a
-                href="/dashboard"
-                class="inline-block px-8 py-4 bg-github-success-emphasis hover:bg-github-success-fg text-white text-lg font-semibold rounded-lg transition-colors"
-              >
-                My Dashboard
-              </a>
-              <a
-                href="/preview"
-                class="inline-block px-8 py-4 bg-github-accent-emphasis hover:bg-github-accent-fg text-white text-lg font-semibold rounded-lg transition-colors"
-              >
-                Preview My Bio
-              </a>
-            </div>
-          </div>
-        </SignedIn>
-      </div>
-
-      <!-- Features Section -->
-      <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default mb-16">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-github-fg-default mb-8 text-center">Features</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 bg-github-accent-emphasis rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-white text-2xl">🔐</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-github-fg-default mb-2">Secure Authentication</h3>
-            <p class="text-gray-600 dark:text-github-fg-muted">Powered by Clerk for secure, seamless authentication</p>
-          </div>
-          <div class="text-center">
-            <div class="w-16 h-16 bg-github-success-emphasis rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-white text-2xl">📝</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-github-fg-default mb-2">Easy Bio Creation</h3>
-            <p class="text-gray-600 dark:text-github-fg-muted">Create and customize your bio with a simple interface</p>
-          </div>
-          <div class="text-center">
-            <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-white text-2xl">🖼️</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-github-fg-default mb-2">Profile Pictures</h3>
-            <p class="text-gray-600 dark:text-github-fg-muted">Your Clerk profile picture is automatically included</p>
-          </div>
         </div>
-      </div>
 
-      <!-- How it works -->
-      <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-github-fg-default mb-6">How it works</h2>
-        <div class="space-y-6">
-          <div class="flex items-start gap-4">
-            <div class="w-8 h-8 bg-blue-100 dark:bg-github-accent-emphasis rounded-full flex items-center justify-center shrink-0">
-              <span class="text-blue-600 dark:text-white font-semibold">1</span>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">How it works</h2>
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-blue-100 dark:bg-blue-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-blue-600 dark:text-blue-100 font-semibold">1</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Create an Issue</h3>
+                <p class="text-gray-600 dark:text-gray-300">Click "Get Started" and fill out the bio template with your information</p>
+              </div>
             </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default">Sign In with Clerk</h3>
-              <p class="text-gray-600 dark:text-github-fg-muted">Authenticate securely using your preferred method</p>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-purple-100 dark:bg-purple-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-purple-600 dark:text-purple-100 font-semibold">2</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Submit</h3>
+                <p class="text-gray-600 dark:text-gray-300">GitHub Actions will automatically process your submission</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="w-8 h-8 bg-green-100 dark:bg-green-600 rounded-full flex items-center justify-center shrink-0">
+                <span class="text-green-600 dark:text-green-100 font-semibold">3</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Done!</h3>
+                <p class="text-gray-600 dark:text-gray-300">Your bio page will be available at blahaj.bio/@username</p>
+              </div>
             </div>
           </div>
-          <div class="flex items-start gap-4">
-            <div class="w-8 h-8 bg-green-100 dark:bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0">
-              <span class="text-green-600 dark:text-white font-semibold">2</span>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default">Create Your Bio</h3>
-              <p class="text-gray-600 dark:text-github-fg-muted">Fill out your bio information in the dashboard</p>
-            </div>
-          </div>
-          <div class="flex items-start gap-4">
-            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-600 rounded-full flex items-center justify-center shrink-0">
-              <span class="text-purple-600 dark:text-white font-semibold">3</span>
-            </div>
-            <div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default">Share Your Profile</h3>
-              <p class="text-gray-600 dark:text-github-fg-muted">Your bio is available at blahaj.bio/@yourusername</p>
-            </div>
-          </div>
-        </div>
+        </div>        
       </div>
-    </div>
+    </main>
   </div>
-  
-</SiteLayout>
+</Layout>

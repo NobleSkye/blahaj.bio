@@ -156,6 +156,81 @@ import { Protect } from "@clerk/astro/components";
     </div>
 
     <script>
+      // Convex integration
+      async function callConvexMutation(functionName, args = {}) {
+        const CONVEX_URL = import.meta.env.PUBLIC_CONVEX_URL;
+        
+        if (!CONVEX_URL) {
+          throw new Error('PUBLIC_CONVEX_URL environment variable is not set');
+        }
+        
+        try {
+          console.log('📡 Making Convex API call:', {
+            url: `${CONVEX_URL}/api/mutation`,
+            functionName,
+            args
+          });
+          
+          const response = await fetch(`${CONVEX_URL}/api/mutation`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              path: functionName,
+              args,
+            }),
+          });
+
+          console.log('📨 Response status:', response.status);
+          console.log('📨 Response ok:', response.ok);
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ HTTP Error Response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+          }
+
+          const result = await response.json();
+          console.log('📦 Full API response:', result);
+          return result.value;
+        } catch (error) {
+          console.error('❌ Error calling Convex mutation:', error);
+          throw error;
+        }
+      }
+
+      async function callConvexQuery(functionName, args = {}) {
+        const CONVEX_URL = import.meta.env.PUBLIC_CONVEX_URL;
+        
+        if (!CONVEX_URL) {
+          throw new Error('PUBLIC_CONVEX_URL environment variable is not set');
+        }
+        
+        try {
+          const response = await fetch(`${CONVEX_URL}/api/query`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              path: functionName,
+              args,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          return result.value;
+        } catch (error) {
+          console.error('Error calling Convex query:', error);
+          throw error;
+        }
+      }
+
       // Wait for Clerk to load (it's automatically initialized by @clerk/astro)
       const waitForClerk = (): Promise<any> => {
         return new Promise((resolve) => {
@@ -232,52 +307,89 @@ import { Protect } from "@clerk/astro/components";
           bio: formData.get('bio'),
           links: formData.get('links'),
           profile_image: user.imageUrl,
-          full_name: user.fullName,
-          updated_at: new Date().toISOString()
+          full_name: user.fullName
         };
 
         try {
-          // Save to localStorage for now (in production, save to your database)
-          localStorage.setItem(`bio_${user.username}`, JSON.stringify(bioData));
+          console.log('Starting bio save process...');
           
-          // Show success message
-          showNotification('Bio saved successfully!', 'success');
+          // Save to localStorage for immediate functionality
+          localStorage.setItem(`bio_${user.username}`, JSON.stringify(bioData));
+          console.log('✅ Saved to localStorage');
+          
+          // Also save to Convex database
+          try {
+            console.log('🚀 Attempting to save to Convex...');
+            console.log('📦 Bio data being sent:', bioData);
+            
+            const result = await callConvexMutation('bios:saveBio', bioData);
+            console.log('✅ Successfully saved to Convex database:', result);
+            showNotification('Bio saved successfully to database!', 'success');
+          } catch (convexError) {
+            console.error('❌ Failed to save to Convex:', convexError);
+            console.error('📦 Data that failed:', bioData);
+            showNotification('Bio saved locally, but failed to sync to database', 'warning');
+          }
           
           // Update last updated time
           document.getElementById('lastUpdated').textContent = 'Just now';
         } catch (error) {
-          console.error('Error saving bio:', error);
+          console.error('❌ Error saving bio:', error);
           showNotification('Error saving bio. Please try again.', 'error');
         }
       });
 
       // Load existing bio data
-      function loadBioData(username) {
+      async function loadBioData(username) {
         try {
+          // First try localStorage for immediate loading
           const savedBio = localStorage.getItem(`bio_${username}`);
           if (savedBio) {
             const bioData = JSON.parse(savedBio);
-            document.getElementById('display_name').value = bioData.display_name || '';
-            document.getElementById('pronouns').value = bioData.pronouns || '';
-            document.getElementById('bio').value = bioData.bio || '';
-            document.getElementById('links').value = bioData.links || '';
-            
-            if (bioData.updated_at) {
-              const lastUpdated = new Date(bioData.updated_at);
-              document.getElementById('lastUpdated').textContent = lastUpdated.toLocaleDateString();
+            populateForm(bioData);
+          }
+
+          // Also try to load from Convex to sync any updates
+          try {
+            const convexBio = await callConvexQuery('bios:getBio', { username });
+            if (convexBio) {
+              populateForm(convexBio);
+              // Update localStorage with latest from Convex
+              localStorage.setItem(`bio_${username}`, JSON.stringify(convexBio));
             }
+          } catch (convexError) {
+            console.warn('Failed to load from Convex, using localStorage:', convexError);
           }
         } catch (error) {
           console.error('Error loading bio data:', error);
         }
       }
 
+      function populateForm(bioData) {
+        document.getElementById('display_name').value = bioData.display_name || '';
+        document.getElementById('pronouns').value = bioData.pronouns || '';
+        document.getElementById('bio').value = bioData.bio || '';
+        document.getElementById('links').value = bioData.links || '';
+        
+        if (bioData.updated_at) {
+          const lastUpdated = new Date(bioData.updated_at);
+          document.getElementById('lastUpdated').textContent = lastUpdated.toLocaleDateString();
+        }
+      }
+
       // Notification system
       function showNotification(message, type) {
         const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transition-opacity ${
-          type === 'success' ? 'bg-github-success-emphasis' : 'bg-github-danger-emphasis'
-        }`;
+        let bgColor;
+        if (type === 'success') {
+          bgColor = 'bg-github-success-emphasis';
+        } else if (type === 'warning') {
+          bgColor = 'bg-yellow-600';
+        } else {
+          bgColor = 'bg-github-danger-emphasis';
+        }
+        
+        notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 transition-opacity ${bgColor}`;
         notification.textContent = message;
         document.body.appendChild(notification);
         

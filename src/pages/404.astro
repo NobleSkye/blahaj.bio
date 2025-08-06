@@ -1,16 +1,18 @@
 ---
-import SiteLayout from '../layouts/SiteLayout.astro';
+import Layout from '../layouts/Layout.astro';
 ---
 
-<SiteLayout title="404 - Page Not Found">
-  <div class="py-16">
-    <div class="max-w-3xl mx-auto px-4 text-center">
-      <h1 class="text-5xl font-bold text-gray-900 dark:text-[#e6edf3] mb-6">404</h1>
-      <p class="text-xl text-gray-600 dark:text-[#7d8590] mb-8">
-        Oops! The page you are looking for doesn't exist.
-      </p>
-      <p class="text-lg text-gray-500 dark:text-[#656d76] mb-12">
-        Did you spell it correct?
+<Layout title="404 - Page Not Found">
+  <div class="min-h-screen flex flex-col bg-gray-900 text-gray-100">
+
+    <main class="flex-grow bg-gray-900 py-16">
+      <div class="max-w-3xl mx-auto px-4 text-center">
+        <h1 class="text-5xl font-bold text-gray-100 mb-6">404</h1>
+        <p class="text-xl text-gray-400 mb-8">
+          Oops! The page you are looking for doesn't exist.
+        </p>
+        <p class="text-lg text-gray-300 mb-12">
+          Did you spell it correct?
         </p>
         <a
           href="/"
@@ -19,6 +21,6 @@ import SiteLayout from '../layouts/SiteLayout.astro';
           Go Back to Home
         </a>
       </div>
-    </div>
+    </main>
   </div>
-</SiteLayout>
+</Layout>
