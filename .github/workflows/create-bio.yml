@@ -36,7 +36,7 @@ jobs:
             const linksMatch = issueBody.match(/Website Links\s*([\s\S]+?)(?=\n\n|\n###|$)/);
             
             // Set outputs
-            const username = usernameMatch ? usernameMatch[1].trim() : '';
+            const username = usernameMatch ? usernameMatch[1].trim().toLowerCase() : '';
             const displayName = displayNameMatch ? displayNameMatch[1].trim() : '';
             const pronouns = pronounsMatch ? pronounsMatch[1].trim() : '';
             const bio = bioMatch ? bioMatch[1].trim() : '';
