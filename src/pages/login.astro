@@ -1,7 +1,23 @@
 ---
-import SiteLayout from "../layouts/SiteLayout.astro"
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { SignIn } from "@clerk/astro/components";
 ---
 
-<SiteLayout title="Clerk + Astro">
-  <p>Sign in to try Clerk out!</p>
+<SiteLayout title="Sign In - Blahaj.bio">
+  <div class="min-h-screen flex items-center justify-center bg-github-canvas-default py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-bold text-github-fg-default">
+          Sign in to your account
+        </h2>
+        <p class="mt-2 text-center text-sm text-github-fg-muted">
+          Create and manage your bio page
+        </p>
+      </div>
+      
+      <div class="flex justify-center">
+        <SignIn />
+      </div>
+    </div>
+  </div>
 </SiteLayout>

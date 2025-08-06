@@ -1,7 +1,5 @@
 ---
-import Footer from '../components/Footer.astro';
-
-export interface Props {
+interface Props {
   title: string;
 }
 
@@ -14,22 +12,28 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <style>
+      /* GitHub Dark Theme Variables */
+      :root {
+        --github-canvas-default: #0d1117;
+        --github-canvas-overlay: #161b22;
+        --github-canvas-inset: #010409;
+        --github-canvas-subtle: #21262d;
+        --github-fg-default: #e6edf3;
+        --github-fg-muted: #7d8590;
+        --github-fg-subtle: #656d76;
+        --github-border-default: #30363d;
+        --github-border-muted: #21262d;
+        --github-accent-emphasis: #1f6feb;
+        --github-accent-fg: #58a6ff;
+        --github-success-emphasis: #238636;
+        --github-success-fg: #56d364;
+        --github-danger-emphasis: #da3633;
+        --github-danger-fg: #f85149;
+      }
+    </style>
   </head>
-  <body class="flex flex-col min-h-screen bg-github-canvas-default text-github-fg-default m-0">
-    <header class="sticky top-0 left-0 right-0 bg-github-canvas-overlay border-b border-github-border-default p-4 shadow-sm z-10">
-      <nav class="max-w-7xl mx-auto px-4 py-3">
-        <a href="/" class="inline-block">
-          <span class="text-2xl font-bold text-github-accent-fg hover:text-github-accent-emphasis transition-colors">
-            Blähaj.bio
-          </span>
-        </a>
-      </nav>
-    </header>
-
-    <main class="flex-grow">
-      <slot />
-    </main>
-
-    <Footer />
+  <body class="min-h-screen bg-github-canvas-default text-github-fg-default">
+    <slot />
   </body>
 </html>

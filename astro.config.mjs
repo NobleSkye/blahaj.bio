@@ -4,18 +4,10 @@ import clerk from '@clerk/astro';
 import node from '@astrojs/node';
 
 export default defineConfig({
-  integrations: [
-    tailwind(),
-    clerk({
-      afterSignInUrl: '/dashboard',
-      afterSignUpUrl: '/dashboard',
-      signInUrl: '/login',
-      signUpUrl: '/signup'
-    })
-  ],
+  integrations: [tailwind(), clerk()],
   site: 'https://blahaj.bio',
   base: '/',
-  output: 'server',
+  output: 'server', // Required for Clerk
   adapter: node({
     mode: 'standalone'
   }),

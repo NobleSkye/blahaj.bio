@@ -3,17 +3,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* GitHub Dark Mode Color Scheme */
+/* Default light mode styles */
 body {
-  background-color: #ffffff;
-  color: #24292f;
-  min-height: 100vh;
+  background-color: white;
+  color: black;
 }
 
-/* GitHub Dark mode styles */
+/* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: #0d1117 !important;
-    color: #e6edf3 !important;
+    background-color: black;
+    color: white;
   }
+
+  /* Dark mode specific styles for other elements */
+  .dark-element {
+    background-color: #333;
+    color: #ccc;
+  }
+}
+
+.fixed-header, .fixed-footer{
+    width: 100%;
+    position: fixed;        
+    background: #333;
+    padding: 10px 0;
+    color: #fff;
 }

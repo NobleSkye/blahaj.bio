@@ -1,35 +1,24 @@
 ---
-import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/astro/components";
+import Layout from "./Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
-export interface Props {
+interface Props {
   title: string;
 }
 
 const { title } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <header>
-      <h1>{title}</h1>
-      <nav>
-        <SignedOut>
-          <SignInButton mode="modal" />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </nav>
-    </header>
-    <article>
+<Layout title={title}>
+  <div class="flex flex-col min-h-screen">
+    <Header />
+    
+    <!-- Main Content -->
+    <main class="flex-grow">
       <slot />
-    </article>
-  </body>
-</html>
+    </main>
+
+    <Footer />
+  </div>
+</Layout>
