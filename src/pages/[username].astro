@@ -1,13 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+// Redirect to @username format for consistency
+const { username } = Astro.params;
 
-export async function getStaticPaths() {
-  const bios = await getCollection('bios');
-  return bios.map(bio => ({
-    params: { username: bio.data.username },
-  }));
+if (username) {
+  return Astro.redirect(`/@${username}`);
 }
 
-const { username } = Astro.params;
-return Astro.redirect(`/@${username}`);
+// If no username, redirect to home
+return Astro.redirect('/');
 ---
