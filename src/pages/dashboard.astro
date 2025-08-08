@@ -419,6 +419,7 @@ import SupporterContent from '../components/supporter-content.astro';
         customBackgroundSection.style.display = 'block';
         customBackgroundInput.value = bioData.custom_background || '';
         
+        
         if (bioData.updated_at) {
           const lastUpdated = new Date(bioData.updated_at);
           document.getElementById('lastUpdated').textContent = lastUpdated.toLocaleDateString();
