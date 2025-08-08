@@ -1,0 +1,66 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { callConvexQuery } from '../lib/convex';
+
+console.log('=== DEBUG PAGE ===');
+console.log('PUBLIC_CONVEX_URL:', import.meta.env.PUBLIC_CONVEX_URL);
+console.log('CONVEX_URL:', import.meta.env.CONVEX_URL);
+
+let allBios = [];
+let errorMessage = '';
+
+try {
+  console.log('Calling getAllBios...');
+  allBios = await callConvexQuery('bios:getAllBios');
+  console.log('All bios:', allBios);
+} catch (error) {
+  console.error('Error fetching all bios:', error);
+  errorMessage = error.toString();
+}
+---
+
+<Layout title="Debug - Blähaj.bio">
+  <main class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-3xl font-bold text-gray-900 mb-8">Debug Information</h1>
+      
+      {errorMessage && (
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+          <strong>Error:</strong> {errorMessage}
+        </div>
+      )}
+      
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">All Bios in Database ({allBios.length})</h2>
+        
+        {allBios.length === 0 ? (
+          <p class="text-gray-500">No bios found in database.</p>
+        ) : (
+          <div class="space-y-4">
+            {allBios.map((bio) => (
+              <div class="border border-gray-200 rounded p-4" key={bio._id}>
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <strong>Username:</strong> {bio.username}
+                  </div>
+                  <div>
+                    <strong>Display Name:</strong> {bio.display_name}
+                  </div>
+                  <div>
+                    <strong>Bio:</strong> {bio.bio?.substring(0, 100)}...
+                  </div>
+                  <div>
+                    <strong>Profile URL:</strong> 
+                    <a href={`/@${bio.username}`} class="text-blue-600 hover:text-blue-800">
+                      /@{bio.username}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </main>
+</Layout>

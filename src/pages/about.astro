@@ -1,15 +1,151 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 ---
-<Layout title="About Blahaj.bio">
-    <main class="flex-grow bg-gradient-to-br from--100 to-purple-100 py-16">
-        <div class="max-w-3xl mx-auto px-4">
-          <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-blue-900 mb-4">
-              About Blahaj.bio
-            </h1>
-            <p class="text-xl text-white-700 mb-8">
-              
+
+<SiteLayout title="About Blahaj.bio">
+  <div class="py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-5xl font-bold text-github-accent-emphasis dark:text-github-accent-fg mb-4">
+          About Blahaj.bio
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-github-fg-muted mb-8">
+          Create beautiful, personalized bio pages with secure authentication
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 mb-16">
+        <!-- What is Blahaj.bio -->
+        <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-github-fg-default mb-6">What is Blahaj.bio?</h2>
+          <div class="space-y-4 text-gray-700 dark:text-github-fg-default">
+            <p>
+              Blahaj.bio is a modern platform for creating personalized bio pages. 
+              Unlike traditional bio link services, we use <strong>Clerk authentication</strong> 
+              to provide a secure, seamless experience.
+            </p>
+            <p>
+              Your bio page automatically includes your profile picture from Clerk and 
+              uses your authenticated username, ensuring consistency and authenticity.
+            </p>
+            <p>
+              Perfect for developers, creators, and anyone who wants a clean, 
+              professional bio page without the hassle.
             </p>
           </div>
-</Layout>
+        </div>
+
+        <!-- Key Features -->
+        <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-github-fg-default mb-6">Key Features</h2>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-white text-xs">✓</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Secure Authentication</h3>
+                <p class="text-sm text-gray-600 dark:text-github-fg-muted">Powered by Clerk for enterprise-grade security</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-white text-xs">✓</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Auto Profile Pictures</h3>
+                <p class="text-sm text-gray-600 dark:text-github-fg-muted">Your Clerk profile photo is automatically included</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-white text-xs">✓</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Clean URLs</h3>
+                <p class="text-sm text-gray-600 dark:text-github-fg-muted">Beautiful blahaj.bio/@username format</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-white text-xs">✓</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Real-time Editing</h3>
+                <p class="text-sm text-gray-600 dark:text-github-fg-muted">Update your bio instantly in the dashboard</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-github-success-emphasis rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                <span class="text-white text-xs">✓</span>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">GitHub Dark Mode</h3>
+                <p class="text-sm text-gray-600 dark:text-github-fg-muted">Beautiful dark mode using GitHub's color palette</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Details -->
+      <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-github-border-default mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-github-fg-default mb-6 text-center">Built With Modern Tech</h2>
+        <div class="grid md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div class="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span class="text-2xl">🚀</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Astro</h3>
+            <p class="text-sm text-gray-600 dark:text-github-fg-muted">Fast, modern web framework</p>
+          </div>
+          <div>
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span class="text-2xl">🔐</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Clerk</h3>
+            <p class="text-sm text-gray-600 dark:text-github-fg-muted">Enterprise authentication</p>
+          </div>
+          <div>
+            <div class="w-16 h-16 bg-cyan-100 dark:bg-cyan-900 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span class="text-2xl">🎨</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">Tailwind</h3>
+            <p class="text-sm text-gray-600 dark:text-github-fg-muted">Utility-first CSS</p>
+          </div>
+          <div>
+            <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-3">
+              <span class="text-2xl">⚡</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 dark:text-github-fg-default">TypeScript</h3>
+            <p class="text-sm text-gray-600 dark:text-github-fg-muted">Type-safe development</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-github-fg-default mb-4">
+          Ready to create your bio?
+        </h2>
+        <p class="text-gray-600 dark:text-github-fg-muted mb-8">
+          Join others who've made their mark with Blahaj.bio
+        </p>
+        <div class="flex gap-4 justify-center">
+          <a
+            href="/login"
+            class="bg-github-success-emphasis hover:bg-github-success-fg text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+          >
+            Get Started
+          </a>
+          <a
+            href="/"
+            class="border border-github-border-default text-gray-700 dark:text-github-fg-default hover:bg-gray-50 dark:hover:bg-github-canvas-subtle font-semibold py-3 px-8 rounded-lg transition-colors"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</SiteLayout>

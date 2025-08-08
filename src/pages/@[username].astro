@@ -1,85 +1,128 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-
-export async function getStaticPaths() {
-  const bios = await getCollection('bios');
-  return bios.map(bio => ({
-    params: { username: bio.data.username.toLowerCase() }, // Normalize to lowercase
-    props: { bio: bio.data },
-  }));
-}
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { callConvexQuery } from '../lib/convex';
 
 const { username } = Astro.params;
-const bios = await getCollection('bios');
 
-// Find bio using case-insensitive match
-const bio = bios.find(b => b.data.username.toLowerCase() === username.toLowerCase())?.data;
+console.log('=== PROFILE PAGE DEBUG ===');
+console.log('Original username from URL:', username);
+
+if (!username) {
+  console.log('No username provided, redirecting to 404');
+  return Astro.redirect('/404');
+}
+
+const normalizedUsername = username.toLowerCase();
+console.log('Normalized username for query:', normalizedUsername);
+
+// Fetch bio from Convex
+let bio;
+try {
+  console.log('Calling Convex getBio with username:', normalizedUsername);
+  bio = await callConvexQuery('bios:getBio', { username: normalizedUsername });
+  console.log('Query result:', bio);
+} catch (error) {
+  console.error('Error fetching bio:', error);
+  console.log('Redirecting to 404 due to error');
+  return Astro.redirect('/404');
+}
 
 if (!bio) {
-  throw new Error('Bio not found');
+  console.log('No bio found for username:', normalizedUsername);
+  console.log('Available in database check needed - returning basic 404 page');
+  // return Astro.redirect('/404');
+  bio = { display_name: 'User Not Found', bio: 'This profile does not exist.', username: normalizedUsername };
 }
+
+console.log('=== FINAL BIO OBJECT ===');
+console.log('Bio found:', bio);
 ---
 
-<Layout title={`${bio.display_name} - Blahaj.bio`}>
-  <div class="min-h-screen flex flex-col bg-gray-900 text-gray-100">
-      <div class="max-w-7xl mx-auto px-4 py-3">
-        <a href="/" class="inline-block">
-        </a>
-      </div>
-
-    <main class="flex-grow bg-gray-900 py-16">
-      <div class="max-w-2xl mx-auto px-4">
-        <div class="bg-gray-800 rounded-2xl shadow-xl p-8">
-          <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-100">{bio.display_name}</h1>
-            <p class="text-gray-400 mt-2">{bio.pronouns}</p>
-          </div>
-          
-          <div class="prose max-w-none mb-8 text-gray-300">
-            <p class="whitespace-pre-wrap">{bio.bio}</p>
-          </div>
-          
-          {bio.links && (
-            <div class="space-y-3">
-              {Array.isArray(bio.links) ? (
-                // Handle structured links with titles
-                bio.links.map(link => (
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-                  >
-                    {link.title}
-                  </a>
-                ))
-              ) : (
-                // Handle simple string links (backward compatibility)
-                bio.links.split('\n').map(link => {
-                  const trimmedLink = link.trim();
-                  if (!trimmedLink) return null;
-                  try {
-                    const url = new URL(trimmedLink);
-                    return (
-                      <a
-                        href={trimmedLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-                      >
-                        {url.hostname.replace('www.', '')}
-                      </a>
-                    );
-                  } catch {
-                    return null;
-                  }
-                })
-              )}
-            </div>
+<SiteLayout title={`${bio.display_name} (@${bio.username}) - Blähaj.bio`}>
+  <div 
+    class="min-h-screen py-16" 
+    style={bio.custom_background 
+      ? `background: ${bio.custom_background}` 
+      : 'background-color: #0d1117'
+    }
+    id="profileContainer"
+  >
+    <div class="max-w-2xl mx-auto px-4">
+    
+    <!-- Profile Content -->
+    <div class="max-w-2xl mx-auto">
+      <div class="bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-github-border-default">
+        
+        <!-- Profile Header -->
+        <div class="text-center mb-8">
+          {bio.profile_image && (
+            <img 
+              src={bio.profile_image} 
+              alt={`${bio.display_name}'s profile`}
+              class="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-github-border-default"
+            />
+          )}
+          <h1 class="text-3xl font-bold text-github-fg-default">{bio.display_name}</h1>
+          <p class="text-github-fg-muted mt-2">@{bio.username}</p>
+          {bio.pronouns && (
+            <p class="text-github-fg-muted text-sm mt-1">{bio.pronouns}</p>
           )}
         </div>
+        
+        <!-- Bio Content -->
+        <div class="mb-8">
+          <h2 class="text-xl font-semibold text-github-fg-default mb-4">About</h2>
+          <div class="prose max-w-none text-github-fg-default">
+            <p class="whitespace-pre-wrap leading-relaxed">{bio.bio}</p>
+          </div>
+        </div>
+        
+        <!-- Links -->
+        {bio.links && bio.links.trim() && (
+          <div class="space-y-3">
+            <h2 class="text-xl font-semibold text-github-fg-default mb-4">Links</h2>
+            {bio.links.split('\n').map((link) => {
+              const trimmedLink = link.trim();
+              if (!trimmedLink) return null;
+              try {
+                const url = new URL(trimmedLink);
+                return (
+                  <a
+                    href={trimmedLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center justify-between w-full p-3 rounded-lg border border-github-border-default bg-github-canvas-subtle hover:bg-github-canvas-default text-github-fg-default transition-colors group"
+                  >
+                    <span class="flex items-center">
+                      <svg class="w-4 h-4 mr-2 text-github-fg-muted" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                      </svg>
+                      {url.hostname.replace('www.', '')}
+                    </span>
+                    <svg class="w-4 h-4 text-github-fg-muted group-hover:text-github-fg-default transition-colors" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                  </a>
+                );
+              } catch {
+                return null;
+              }
+            })}
+          </div>
+        )}
+        
+        <!-- Profile Footer -->
+        <div class="mt-8 pt-6 border-t border-github-border-default text-center">
+          <p class="text-github-fg-subtle text-sm">
+            {bio.updated_at && (
+              <span>Last updated: {new Date(bio.updated_at).toLocaleDateString()}</span>
+            )}
+          </p>
+          <p class="text-github-fg-subtle text-sm mt-2">
+            <a href="/" class="text-github-accent-fg hover:underline">Create your own bio</a> on Blähaj.bio
+          </p>
+        </div>
       </div>
-    </main>
+    </div>
   </div>
-</Layout>
+</SiteLayout>

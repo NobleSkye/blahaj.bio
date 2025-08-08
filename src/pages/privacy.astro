@@ -1,37 +1,51 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 ---
 
-<Layout>
-  <main class="prose mx-auto p-4">
-
-  </main>
-
-
-
-  <div class="min-h-screen flex flex-col">
-    <main class="flex-grow bg-gradient-to-br from--100 to-purple-100 py-16">
-      <div class="max-w-3xl mx-auto px-4">
-        <div class="text-center mb-12">
-          <h1 class="text-5xl font-bold text-blue-900 mb-4">
-            New Profile
-          </h1>
-    <h1>Privacy Policy</h1>
-    <p>
-      At Blahaj.bio, we take privacy seriously. We do not collect, store, or process any personal data on our servers.
-    </p>
-    <h2>GitHub Authentication</h2>
-    <p>
-      Our platform allows you to sign in using GitHub. This authentication process is handled entirely by GitHub, and we do not store any user data related to your authentication.
-    </p>
-    <h2>Data Submission</h2>
-    <p>
-      Any data you submit through our platform is directly sent to GitHub and is subject to <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub’s Privacy Policy</a> and <a href="https://docs.github.com/en/site-policy/github-terms/github-terms-of-service" target="_blank" rel="noopener noreferrer">Terms of Service</a>.
-    </p>
-    <h2>Changes to This Policy</h2>
-    <p>
-      We reserve the right to update this policy as needed. Any significant changes will be reflected on this page.
-    </p>
+<SiteLayout title="Privacy Policy - Blähaj.bio">
+  <div class="min-h-screen bg-github-canvas-default py-16">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="bg-github-canvas-overlay rounded-2xl shadow-xl p-8 border border-github-border-default">
+        <div class="prose prose-github max-w-none">
+          <h1 class="text-4xl font-bold text-github-fg-default mb-8">Privacy Policy</h1>
+          
+          <p class="text-github-fg-muted text-lg mb-6">
+            At Blähaj.bio, we take privacy seriously. We collect and process only the minimum data necessary to provide our services.
+          </p>
+          
+          <h2 class="text-2xl font-bold text-github-fg-default mt-8 mb-4">Authentication & Data</h2>
+          <p class="text-github-fg-muted mb-4">
+            Our platform uses Clerk for authentication and Convex for data storage. When you sign up, we store your profile information and bio data to provide our services.
+          </p>
+          
+          <h2 class="text-2xl font-bold text-github-fg-default mt-8 mb-4">Subscription Management</h2>
+          <p class="text-github-fg-muted mb-4">
+            To manage your subscription and billing information, click on your profile icon in the top right corner of the page and access your account settings.
+          </p>
+          
+          <h2 class="text-2xl font-bold text-github-fg-default mt-8 mb-4">Data Security</h2>
+          <p class="text-github-fg-muted mb-4">
+            All payments are processed securely through Stripe. We do not store payment information on our servers.
+          </p>
+          
+          <h2 class="text-2xl font-bold text-github-fg-default mt-8 mb-4">Changes to This Policy</h2>
+          <p class="text-github-fg-muted mb-4">
+            We reserve the right to update this policy as needed. Any significant changes will be reflected on this page.
+          </p>
+          
+          <div class="mt-8 pt-6 border-t border-github-border-default">
+            <a
+              href="/"
+              class="inline-flex items-center text-github-accent-emphasis hover:text-github-accent-fg transition-colors"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              Back to Home
+            </a>
+          </div>
         </div>
-
-</Layout>
+      </div>
+    </div>
+  </div>
+</SiteLayout>

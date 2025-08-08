@@ -153,12 +153,12 @@ import SupporterContent from '../components/supporter-content.astro';
             <div class="bg-white dark:bg-github-canvas-overlay rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-github-border-default">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-github-fg-default mb-4">Quick Actions</h3>
               <div class="space-y-3">
-                <a
-                  href="/preview"
+                <button
+                  id="viewProfileBtn"
                   class="block w-full text-center py-2 px-4 rounded-lg bg-github-accent-emphasis hover:bg-github-accent-fg text-white transition-colors"
                 >
                   View Public Profile
-                </a>
+                </button>
                 <button
                   id="copyLinkBtn"
                   class="block w-full text-center py-2 px-4 rounded-lg border border-github-border-default text-gray-700 dark:text-github-fg-default hover:bg-gray-50 dark:hover:bg-github-canvas-subtle transition-colors"
@@ -326,6 +326,13 @@ import SupporterContent from '../components/supporter-content.astro';
         }
       });
 
+      // View Public Profile button
+      document.getElementById('viewProfileBtn').addEventListener('click', () => {
+        if (user) {
+          window.location.href = `/@${user.username}`;
+        }
+      });
+
       // Form submission
       document.getElementById('bioForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -404,16 +411,13 @@ import SupporterContent from '../components/supporter-content.astro';
         document.getElementById('bio').value = bioData.bio || '';
         document.getElementById('links').value = bioData.links || '';
         
-        // Handle custom background for supporters
+        // Handle custom background for supporters (always show in development)
         const customBackgroundSection = document.getElementById('customBackgroundSection');
         const customBackgroundInput = document.getElementById('custom_background');
         
-        if (bioData.is_supporter) {
-          customBackgroundSection.style.display = 'block';
-          customBackgroundInput.value = bioData.custom_background || '';
-        } else {
-          customBackgroundSection.style.display = 'none';
-        }
+        // Always show custom background section in development
+        customBackgroundSection.style.display = 'block';
+        customBackgroundInput.value = bioData.custom_background || '';
         
         if (bioData.updated_at) {
           const lastUpdated = new Date(bioData.updated_at);

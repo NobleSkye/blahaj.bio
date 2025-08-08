@@ -1,13 +1,32 @@
 ---
-import { getCollection } from 'astro:content';
-
-export async function getStaticPaths() {
-  const bios = await getCollection('bios');
-  return bios.map(bio => ({
-    params: { username: bio.data.username },
-  }));
-}
+import { callConvexQuery } from '../lib/convex';
 
 const { username } = Astro.params;
-return Astro.redirect(`/@${username}`);
+
+if (!username) {
+  return Astro.redirect('/404');
+}
+
+// Don't redirect specific pages that should not be treated as usernames
+const protectedRoutes = ['debug', 'admin', 'api', 'login', 'register', 'dashboard', 'about', 'privacy', 'new', 'settings'];
+if (protectedRoutes.includes(username.toLowerCase())) {
+  return Astro.redirect('/404');
+}
+
+// Check if this username exists in the database before redirecting
+let bio;
+try {
+  bio = await callConvexQuery('bios:getBio', { username: username.toLowerCase() });
+} catch (error) {
+  console.error('Error checking bio existence:', error);
+  return Astro.redirect('/404');
+}
+
+if (bio) {
+  // Redirect to the @ version if bio exists
+  return Astro.redirect(`/@${username}`);
+} else {
+  // No bio found, go to 404
+  return Astro.redirect('/404');
+}
 ---

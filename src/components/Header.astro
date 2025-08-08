@@ -1,10 +1,129 @@
-<header class="sticky top-0 bg-gray-100 dark:bg-gray-900 p-4 shadow-sm z-10">
-    <!-- Your header content -->
-    <nav class="max-w-7xl mx-auto px-4 py-3">
+---
+import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/astro/components";
+---
+
+<header class="sticky top-0 bg-white dark:bg-github-canvas-default border-b border-gray-200 dark:border-github-border-default shadow-sm z-50">
+  <nav class="max-w-7xl mx-auto px-4 py-3">
+    <div class="flex justify-between items-center">
+      <!-- Logo -->
       <a href="/" class="inline-block">
         <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-          Blahaj.bio
+          Blähaj.bio
         </span>
       </a>
-    </nav>
-  </header>
+
+      <!-- Navigation Links & Auth -->
+      <div class="flex items-center space-x-4">
+        <!-- Signed Out State -->
+        <SignedOut>
+          <a href="/about" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
+            About
+          </a>
+          <SignInButton mode="modal">
+            <button class="bg-github-accent-emphasis hover:bg-github-accent-fg text-white px-4 py-2 rounded-lg transition-colors">
+              Sign In
+            </button>
+          </SignInButton>
+        </SignedOut>
+
+        <!-- Signed In State -->
+        <SignedIn>
+          <a href="/dashboard" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors font-medium">
+            Dashboard
+          </a>
+          <a href="#" id="profileLink" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors font-medium">
+            Profile
+          </a>
+          <a href="/billing/plans" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
+            Support Us
+          </a>
+          <a href="/about" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
+            About
+          </a>
+          <UserButton 
+            appearance={{
+              elements: {
+                avatarBox: "w-8 h-8",
+              }
+            }}
+          />
+        </SignedIn>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  // Set up profile link when user is signed in
+  async function setupProfileLink() {
+    const profileLink = document.getElementById('profileLink') as HTMLAnchorElement;
+    if (profileLink && window.Clerk && window.Clerk.user) {
+      const user = window.Clerk.user;
+      
+      // Debug: Log all user properties
+      console.log('Full Clerk user object:', user);
+      console.log('User username:', user.username);
+      console.log('User external accounts:', user.externalAccounts);
+      console.log('User email:', user.primaryEmailAddress?.emailAddress);
+      console.log('User metadata:', user.unsafeMetadata);
+      
+      // Try multiple ways to get the username - same logic as dashboard
+      let username = user.username;
+      
+      // If no username in Clerk, try to derive from GitHub external account
+      if (!username && user.externalAccounts?.length > 0) {
+        const githubAccount = user.externalAccounts.find(account => account.provider === 'github');
+        if (githubAccount && githubAccount.username) {
+          username = githubAccount.username;
+          console.log('Using GitHub username:', username);
+        }
+      }
+      
+      // If no username, try to get it from unsafeMetadata
+      if (!username && user.unsafeMetadata?.username) {
+        username = user.unsafeMetadata.username as string;
+        console.log('Using metadata username:', username);
+      }
+      
+      // If still no username, try to derive from email (fallback)
+      if (!username && user.primaryEmailAddress?.emailAddress) {
+        username = user.primaryEmailAddress.emailAddress.split('@')[0];
+        console.log('Using email-derived username:', username);
+      }
+      
+      if (username) {
+        const profileUrl = `/@${username.toLowerCase()}`;
+        profileLink.href = profileUrl;
+        console.log('Profile link set to:', profileUrl);
+        console.log('Click the Profile link to test if it works now!');
+      } else {
+        // Fallback to dashboard if no username found
+        profileLink.href = '/dashboard';
+        profileLink.title = 'Go to Dashboard to set up your profile';
+        console.log('No username found, redirecting to dashboard');
+      }
+    }
+  }
+
+  // Wait for Clerk to load and set up profile link
+  async function waitForClerk() {
+    if (window.Clerk && window.Clerk.user) {
+      await setupProfileLink();
+    } else {
+      // Retry if Clerk hasn't loaded yet
+      setTimeout(waitForClerk, 100);
+    }
+  }
+
+  // Start checking for Clerk after DOM loads
+  document.addEventListener('DOMContentLoaded', () => {
+    waitForClerk();
+    
+    // Also check periodically in case user signs in after page load
+    setInterval(async () => {
+      if (window.Clerk && window.Clerk.user) {
+        await setupProfileLink();
+      }
+    }, 2000); // Check every 2 seconds instead of 1
+  });
+</script>
