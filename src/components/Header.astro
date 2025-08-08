@@ -1,48 +1,10 @@
----
-import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/astro/components";
----
-
-<header class="sticky top-0 bg-white dark:bg-github-canvas-default border-b border-gray-200 dark:border-github-border-default shadow-sm z-50">
-  <nav class="max-w-7xl mx-auto px-4 py-3">
-    <div class="flex justify-between items-center">
-      <!-- Logo -->
+<header class="sticky top-0 bg-gray-100 dark:bg-gray-900 p-4 shadow-sm z-10">
+    <!-- Your header content -->
+    <nav class="max-w-7xl mx-auto px-4 py-3">
       <a href="/" class="inline-block">
         <span class="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-          Blähaj.bio
+          Blahaj.bio
         </span>
       </a>
-
-      <!-- Navigation Links & Auth -->
-      <div class="flex items-center space-x-4">
-        <!-- Signed Out State -->
-        <SignedOut>
-          <a href="/about" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
-            About
-          </a>
-          <SignInButton mode="modal">
-            <button class="bg-github-accent-emphasis hover:bg-github-accent-fg text-white px-4 py-2 rounded-lg transition-colors">
-              Sign In
-            </button>
-          </SignInButton>
-        </SignedOut>
-
-        <!-- Signed In State -->
-        <SignedIn>
-          <a href="/dashboard" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
-            Dashboard
-          </a>
-          <a href="/about" class="text-gray-600 dark:text-github-fg-muted hover:text-gray-900 dark:hover:text-github-fg-default transition-colors">
-            About
-          </a>
-          <UserButton 
-            appearance={{
-              elements: {
-                avatarBox: "w-8 h-8",
-              }
-            }}
-          />
-        </SignedIn>
-      </div>
-    </div>
-  </nav>
-</header>
+    </nav>
+  </header>

@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { Protect } from "@clerk/astro/components";
+import SupporterContent from '../components/supporter-content.astro';
 ---
 
 <SiteLayout title="Dashboard - Blähaj.bio">
@@ -85,6 +86,37 @@ import { Protect } from "@clerk/astro/components";
                   ></textarea>
                   <p class="mt-2 text-sm text-gray-500 dark:text-github-fg-subtle">One link per line</p>
                 </div>
+
+                <!-- Custom Background (Supporter Only) -->
+                <SupporterContent>
+                  <div class="bg-github-accent-emphasis/10 border border-github-accent-emphasis/20 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-2">
+                      <svg class="w-5 h-5 text-github-accent-emphasis" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                      </svg>
+                      <h3 class="text-lg font-semibold text-github-accent-emphasis">Custom Background</h3>
+                    </div>
+                    <p class="text-sm text-github-fg-muted mb-4">Customize your profile background with CSS gradients!</p>
+                    
+                    <div>
+                      <label for="custom_background" class="block text-sm font-medium text-github-fg-default mb-2">
+                        Custom Background CSS
+                      </label>
+                      <textarea
+                        id="custom_background"
+                        name="custom_background"
+                        rows="3"
+                        class="w-full px-4 py-3 rounded-lg border border-github-border-default bg-github-canvas-default text-github-fg-default focus:ring-2 focus:ring-github-accent-emphasis focus:border-transparent font-mono text-sm"
+                        placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                      ></textarea>
+                      <p class="mt-2 text-sm text-github-fg-subtle">
+                        Enter CSS background property. Examples:<br>
+                        • <code class="bg-github-canvas-subtle px-1 rounded">linear-gradient(45deg, #ff6b6b, #4ecdc4)</code><br>
+                        • <code class="bg-github-canvas-subtle px-1 rounded">radial-gradient(circle, #ff9a9e, #fecfef)</code>
+                      </p>
+                    </div>
+                  </div>
+                </SupporterContent>
 
                 <!-- Save Button -->
                 <div class="flex gap-4">
@@ -259,7 +291,7 @@ import { Protect } from "@clerk/astro/components";
             <p class="text-sm text-gray-600 dark:text-github-fg-muted">
               Your bio URL: <br>
               <code class="text-xs bg-gray-100 dark:bg-github-canvas-default px-2 py-1 rounded">
-                blähaj.bio/@${user.username}
+                blahaj.bio/@${user.username}
               </code>
             </p>
           </div>
@@ -307,7 +339,8 @@ import { Protect } from "@clerk/astro/components";
           bio: formData.get('bio'),
           links: formData.get('links'),
           profile_image: user.imageUrl,
-          full_name: user.fullName
+          full_name: user.fullName,
+          custom_background: formData.get('custom_background')
         };
 
         try {
@@ -370,6 +403,17 @@ import { Protect } from "@clerk/astro/components";
         document.getElementById('pronouns').value = bioData.pronouns || '';
         document.getElementById('bio').value = bioData.bio || '';
         document.getElementById('links').value = bioData.links || '';
+        
+        // Handle custom background for supporters
+        const customBackgroundSection = document.getElementById('customBackgroundSection');
+        const customBackgroundInput = document.getElementById('custom_background');
+        
+        if (bioData.is_supporter) {
+          customBackgroundSection.style.display = 'block';
+          customBackgroundInput.value = bioData.custom_background || '';
+        } else {
+          customBackgroundSection.style.display = 'none';
+        }
         
         if (bioData.updated_at) {
           const lastUpdated = new Date(bioData.updated_at);
