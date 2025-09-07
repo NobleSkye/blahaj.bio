@@ -1,10 +1,12 @@
 ---
 username: "imeesa"
-display_name: "sandcar"
-pronouns: "Sand/Cat"
-bio: Developer, Autisic
-  
+display_name: "Eesa"
+pronouns: "he/him"
+bio: |
+  https://discord.gg/we-are-the-moon-1369413936046280804
 links: |
-    https://imeesa.com/
-    https://discord.gg/QbCtTcaJKH
+  https://eesa.lol
+https://sandcat.link
+https://goober.company
+https://discord.gg/we-are-the-moon-1369413936046280804
 ---
