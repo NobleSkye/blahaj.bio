@@ -1,6 +1,6 @@
 ---
 username: "ham"
-display_name: "Mallet"
+display_name: "Ham_Mallet"
 pronouns: "He/Them"
 bio: |
   Meow
