@@ -1,9 +1,10 @@
 ---
-username: "Admin"
-display_name: "Admin"
-pronouns: "Any/All"
+username: Admin
+display_name: Admin
+pronouns: Any/All
 bio: Testing 123 testing 123
-  
-links: |
-    https://blahaj.bio
+links:
+  - title: blahaj.bio
+    url: 'https://blahaj.bio'
 ---
+

@@ -1,5 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { auth } from "../lib/auth";
+
+const bios = await getCollection('bios');
+const headers = Astro.request.headers;
+const sessionRes = await auth.api.getSession({ headers });
+const session = sessionRes?.data;
 ---
 
 <Layout title="Blahaj.bio - Create Your Bio Page">
@@ -54,7 +61,29 @@ import Layout from '../layouts/Layout.astro';
               </div>
             </div>
           </div>
-        </div>        
+        </div>
+
+        {session?.session ? (
+          <div class="mt-8 text-center">
+            <a href="/edit" class="inline-block px-4 py-2 rounded bg-blue-600 text-white">
+              Edit your bio
+            </a>
+          </div>
+        ) : (
+          <div class="mt-8 text-center">
+            <a href="/api/auth/sign-in?provider=github&callbackURL=/edit" class="inline-block px-4 py-2 rounded bg-green-600 text-white">
+              Sign in with GitHub
+            </a>
+          </div>
+        )}
+
+        <div class="mt-8 grid gap-4">
+          {bios.map(b => (
+            <a href={`/@${b.data.username}`} class="p-4 rounded bg-gray-800 text-white">
+              {b.data.display_name || b.data.username}
+            </a>
+          ))}
+        </div>
       </div>
     </main>
   </div>
