@@ -1,0 +1,46 @@
+---
+import Layout from '../src/shared/Layout.astro';
+import { getSession } from 'better-auth/client';
+import { getEntryBySlug } from 'astro:content';
+import { useState } from 'react';
+
+const session = await getSession(Astro.request);
+const username = session?.user?.username;
+let entry = username ? await getEntryBySlug('bios', username) : null;
+
+let form = {
+  display_name: entry?.data.display_name || '',
+  pronouns: entry?.data.pronouns || '',
+  bio: entry?.data.bio || '',
+  links: entry?.data.links || []
+};
+---
+
+<Layout title="Edit your bio - blahaj.bio">
+  <main class="mx-auto max-w-2xl p-6 prose">
+    <h1>Edit your bio</h1>
+    {session ? (
+      <form method="POST" action="/api/save-bio" class="space-y-4">
+        <label>
+          Display Name
+          <input name="display_name" value={form.display_name} class="input" required />
+        </label>
+        <label>
+          Pronouns
+          <input name="pronouns" value={form.pronouns} class="input" />
+        </label>
+        <label>
+          Bio (Markdown supported)
+          <textarea name="bio" rows="6" class="input" required>{form.bio}</textarea>
+        </label>
+        <label>
+          Links (one per line, format: title|url)
+          <textarea name="links" rows="3" class="input">{form.links.map(l => `${l.title}|${l.url}`).join('\n')}</textarea>
+        </label>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    ) : (
+      <p><a href="/api/auth/github" class="underline">Sign in with GitHub</a> to edit your bio.</p>
+    )}
+  </main>
+</Layout>

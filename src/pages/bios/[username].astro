@@ -1,0 +1,30 @@
+---
+import Layout from '../../shared/Layout.astro';
+import { getEntryBySlug } from 'astro:content';
+
+const { username } = Astro.params;
+const entry = username ? await getEntryBySlug('bios', username) : null;
+---
+
+<Layout title={entry ? `${entry.data.display_name} - blahaj.bio` : 'Profile - blahaj.bio'}>
+  <main class="mx-auto max-w-2xl p-6 prose">
+    {entry ? (
+      <>
+        <h1>{entry.data.display_name}</h1>
+        {entry.data.pronouns && <p class="text-gray-500">{entry.data.pronouns}</p>}
+        <article>
+          <pre class="whitespace-pre-wrap">{entry.data.bio}</pre>
+        </article>
+        {entry.data.links?.length ? (
+          <ul>
+            {entry.data.links.map((l) => (
+              <li><a class="underline" href={l.url}>{l.title}</a></li>
+            ))}
+          </ul>
+        ) : null}
+      </>
+    ) : (
+      <p>Profile not found.</p>
+    )}
+  </main>
+</Layout>

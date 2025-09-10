@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    command: pnpm run dev
+    ports:
+      - "4321:4321"
+    volumes:
+      - .:/workspaces/blahaj.bio
+      - /workspaces/blahaj.bio/node_modules
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - ./data:/data
+    command: ["sqlite3", "/data/auth.db"]
