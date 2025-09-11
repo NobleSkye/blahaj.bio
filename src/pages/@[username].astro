@@ -19,9 +19,13 @@ const bio = bios.find(b => b.data.username.toLowerCase() === username.toLowerCas
 if (!bio) {
   throw new Error('Bio not found');
 }
+const displayName = bio.display_name || bio.username;
+const pronouns = bio.pronouns || "";
+const links = bio.links || [];
+const bioText = bio.bio || "";
 ---
 
-<Layout title={`${bio.display_name} - Blahaj.bio`}>
+<Layout title={`${displayName} - Blahaj.bio`}>
   <div class="min-h-screen flex flex-col bg-gray-900 text-gray-100">
       <div class="max-w-7xl mx-auto px-4 py-3">
         <a href="/" class="inline-block">
@@ -32,19 +36,19 @@ if (!bio) {
       <div class="max-w-2xl mx-auto px-4">
         <div class="bg-gray-800 rounded-2xl shadow-xl p-8">
           <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-100">{bio.display_name}</h1>
-            <p class="text-gray-400 mt-2">{bio.pronouns}</p>
+            <h1 class="text-3xl font-bold text-gray-100">{displayName}</h1>
+            <p class="text-gray-400 mt-2">{pronouns}</p>
           </div>
           
           <div class="prose max-w-none mb-8 text-gray-300">
-            <p class="whitespace-pre-wrap">{bio.bio}</p>
+            <p class="whitespace-pre-wrap">{bioText}</p>
           </div>
           
-          {bio.links && (
+          {links && (
             <div class="space-y-3">
-              {Array.isArray(bio.links) ? (
+              {Array.isArray(links) ? (
                 // Handle structured links with titles
-                bio.links.map(link => (
+                links.map(link => (
                   <a
                     href={link.url}
                     target="_blank"
@@ -54,28 +58,7 @@ if (!bio) {
                     {link.title}
                   </a>
                 ))
-              ) : (
-                // Handle simple string links (backward compatibility)
-                bio.links.split('\n').map(link => {
-                  const trimmedLink = link.trim();
-                  if (!trimmedLink) return null;
-                  try {
-                    const url = new URL(trimmedLink);
-                    return (
-                      <a
-                        href={trimmedLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="block w-full text-center py-2 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:opacity-90 transition-opacity"
-                      >
-                        {url.hostname.replace('www.', '')}
-                      </a>
-                    );
-                  } catch {
-                    return null;
-                  }
-                })
-              )}
+              ) : null}
             </div>
           )}
         </div>

@@ -1,10 +1,10 @@
 ---
-username: "nicoplaysthings"
-display_name: "Nico"
-pronouns: "any/all"
+username: nicoplaysthings
+display_name: Nico
+pronouns: any/all
 bio: Hi.
-  
-links: |
-    https://nicoplaysthings.live
-  
+links:
+  - title: nicoplaysthings.live
+    url: 'https://nicoplaysthings.live'
 ---
+

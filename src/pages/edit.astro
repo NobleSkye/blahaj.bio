@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { auth } from "../lib/auth";
+import { Octokit } from "@octokit/rest";
+import { getCollection } from 'astro:content';
+
+const headers = Astro.request.headers;
+const sessionRes = await auth.api.getSession({ headers });
+const session = sessionRes?.data;
+
+if (!session?.session) {
+  return Astro.redirect("/api/auth/sign-in?provider=github&callbackURL=/edit");
+}
+
+const user = session.user;
+const username = user.email?.split("@")[0] || user.name?.toLowerCase()?.replace(/\s+/g, '') || '';
+const bios = await getCollection('bios');
+const bio = bios.find(b => b.data.username.toLowerCase() === username.toLowerCase())?.data || {
+  username,
+  display_name: user.name || username,
+  pronouns: "",
+  bio: "",
+  links: [] as Array<{ title: string; url: string }>,
+};
+
+const owner = import.meta.env.GITHUB_OWNER as string;
+const repo = import.meta.env.GITHUB_REPO as string;
+const token = import.meta.env.GITHUB_TOKEN as string;
+const octokit = new Octokit({ auth: token });
+
+async function commitBio(data: any) {
+  const path = `src/content/bios/${username}.md`;
+  const newContent = `---\nusername: ${data.username}\ndisplay_name: ${data.display_name}\npronouns: ${data.pronouns}\nlinks:\n${(data.links||[]).map((l:any)=>`  - title: ${l.title}\n    url: ${l.url}`).join("\n")}\n---\n\n${data.bio}\n`;
+  // get current file sha if exists
+  let sha: string | undefined;
+  try {
+    const { data: file } = await octokit.repos.getContent({ owner, repo, path });
+    if (!Array.isArray(file) && 'sha' in file) sha = (file as any).sha as string;
+  } catch {}
+  await octokit.repos.createOrUpdateFileContents({
+    owner,
+    repo,
+    path,
+    message: `chore: update bio for ${username}`,
+    content: Buffer.from(newContent).toString('base64'),
+    sha,
+  });
+}
+
+export async function post({ request }: { request: Request }) {
+  const form = await request.formData();
+  if (form.get("_action") !== "save") return new Response(null, { status: 400 });
+  const data = {
+    username,
+    display_name: String(form.get("display_name") || ""),
+    pronouns: String(form.get("pronouns") || ""),
+    bio: String(form.get("bio") || ""),
+    links: [] as Array<{ title: string; url: string }>,
+  };
+  await commitBio(data);
+  return new Response(null, { status: 303, headers: { Location: `/@${username}` } });
+}
+---
+<Layout title="Edit your bio">
+  <main class="max-w-2xl mx-auto px-4 py-12">
+    <h1 class="text-2xl font-bold mb-6">Edit your bio</h1>
+    <form method="post">
+      <input type="hidden" name="_action" value="save" />
+      <div class="space-y-4">
+        <label class="block">
+          <span class="block text-sm mb-1">Display name</span>
+          <input name="display_name" class="w-full p-2 rounded text-black" value={bio.display_name} />
+        </label>
+        <label class="block">
+          <span class="block text-sm mb-1">Pronouns</span>
+          <input name="pronouns" class="w-full p-2 rounded text-black" value={bio.pronouns} />
+        </label>
+        <label class="block">
+          <span class="block text-sm mb-1">Bio</span>
+          <textarea name="bio" class="w-full p-2 rounded text-black" rows="6">{bio.bio}</textarea>
+        </label>
+      </div>
+      <div class="mt-6 flex gap-3">
+        <a href="/api/auth/sign-out" class="px-4 py-2 rounded bg-gray-600">Sign out</a>
+        <button type="submit" class="px-4 py-2 rounded bg-blue-600">Save</button>
+      </div>
+    </form>
+  </main>
+</Layout>

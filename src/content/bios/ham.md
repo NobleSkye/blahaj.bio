@@ -1,9 +1,11 @@
 ---
-username: "ham"
-display_name: "Mallet"
-pronouns: "He/Them"
+username: ham
+display_name: Mallet
+pronouns: He/Them
 bio: |
   Meow
-links: |
-  https://youtube.com
+links:
+  - title: youtube.com
+    url: 'https://youtube.com'
 ---
+

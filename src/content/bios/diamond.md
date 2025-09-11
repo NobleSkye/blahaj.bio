@@ -1,9 +1,10 @@
 ---
-username: "diamond"
-display_name: "Kurtis (diamond)"
-pronouns: "any"
+username: diamond
+display_name: Kurtis (diamond)
+pronouns: any
 bio: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-  
-links: |
-  https://turnip.fun
+links:
+  - title: turnip.fun
+    url: 'https://turnip.fun'
 ---
+
